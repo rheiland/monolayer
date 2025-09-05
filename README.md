@@ -15,3 +15,9 @@ grep reach relax_11cells.out   # grep probably won't be on a Windows shell
 # ---- custom_function: Width reached 90% , t= 88.7
 ```
 Therefore we use 88.7 mins as the PhysiCell time to reach 90% relaxation width, i.e., the leftmost cell is at x= -45 and rightmost at x=45. And 88.7 will become the cell cycle duration for the full monolayer model.
+
+Next, let's plot the results for the relaxation of the 11 compressed cells:
+```
+python analysis/plot_11cells_crop.py 48
+```
+<img src="./images/relax_11cells.png" width="40%">
