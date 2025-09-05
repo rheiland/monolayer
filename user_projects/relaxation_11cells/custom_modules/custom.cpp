@@ -210,6 +210,9 @@ void phenotype_function( Cell* pCell, Phenotype& phenotype, double dt )
 void custom_function( Cell* pCell, Phenotype& phenotype , double dt )
 { 
     static bool reached_90 = false;
+
+    // pCell->custom_data["xpos"] = pCell->position[0];
+
     // if (pCell->ID == 10 && pCell->position[0] >= 90.0)  // 90%, 90pct
     if (pCell->ID == 10)
     {
