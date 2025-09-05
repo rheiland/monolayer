@@ -206,7 +206,7 @@ ax0.set_ylabel("Tissue width (CD)", fontsize=14)
 # title_str = '11 horizontal cells mechanics test (PhysiCell)'
 # title_str = '11 horiz cells mechanics test (PhysiCell)'
 # title_str = 'PhysiCell: relaxation test (10 cells)'
-title_str = 'PhysiCell: 11 compressed cells'
+title_str = 'PhysiCell: relaxation of 11 cells'
 ax0.set_title(title_str, fontsize=12)
 
 # keep last plot displayed
