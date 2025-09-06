@@ -45,11 +45,13 @@ Note: 15 hrs in PhysiCell time units = 900 mins. Divide that by the 88.7 min (= 
 
 ## Monolayer
 
+```
+python analysis/plot_21cells_inner11_crop.py 100
+```
 <img src="./images/mono_live_cycle_fixed.png" width="50%">
 <img src="./images/mono_mechanics.png" width="50%">
 <img src="./images/mono_beta_threshold.png" width="40%">
-<img src="./images/mono_2d_12hr.png" width="40%">
-<img src="./images/mono_10k.png" width="40%">
+<img src="./images/mono_2d_12hr.png" width="35%"><img src="./images/mono_10k.png" width="35%">
 
 
 
