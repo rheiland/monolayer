@@ -3,6 +3,8 @@ Monolayer OpenVT reference model using PhysiCell
 
 This repository simulates a growing monolayer model as part of the OpenVT project.
 
+## Relaxation of 11 cells
+
 To begin, we model a simple relaxation model of 11 compressed cells in a horizontal line.
 ```
 make -j2
@@ -23,6 +25,8 @@ python analysis/plot_11cells_crop.py 48
 <img src="./images/relax_11cells.png" width="40%">
 <hr>
 
+## Relaxation of 11 + 10 (5 and 5) outer cells
+
 ```
 make load PROJ=relaxation_21cells
 make
@@ -36,4 +40,17 @@ python analysis/plot_21cells_crop.py 90
 <img src="./images/relax_21cells.png" width="40%">
 <img src="./images/cells21_15hrs.png" width="40%">
 Note: 15 hrs in PhysiCell time units = 900 mins. Divide that by the 88.7 min (= 1 T unit; rf. above) to get ~10 T for the x-axis.
+
+<hr>
+
+## Monolayer
+
+<img src="./images/mono_live_cycle_fixed.png" width="50%">
+<img src="./images/mono_mechanics.png" width="50%">
+<img src="./images/mono_beta_threshold.png" width="40%">
+<img src="./images/mono_2d_12hr.png" width="40%">
+<img src="./images/mono_10k.png" width="40%">
+
+
+
 
