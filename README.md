@@ -21,3 +21,19 @@ Next, let's plot the results for the relaxation of the 11 compressed cells:
 python analysis/plot_11cells_crop.py 48
 ```
 <img src="./images/relax_11cells.png" width="40%">
+<hr>
+
+```
+make load PROJ=relaxation_21cells
+make
+project config/relax_21cells.xml
+# or:
+python <path-to-studio>/bin/studio.py -c config/relax_21cells.xml
+
+# plot relaxation: outer distance = f(time)
+python analysis/plot_21cells_crop.py 90
+```
+<img src="./images/relax_21cells.png" width="40%">
+<img src="./images/cells21_15hrs.png" width="40%">
+Note: 15 hrs in PhysiCell time units = 900 mins. Divide that by the 88.7 min (= 1 T unit; rf. above) to get ~10 T for the x-axis.
+
