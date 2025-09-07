@@ -68,7 +68,7 @@ python analysis/plot_time_diam.py
 <img src="./images/monolayer_time_diam.png" width="40%">
 Using calibrate time (T) and space (S) units.
 
-<hr>
+
 ## Monolayer - not a fixed cell cycle
 
 <img src="./images/mono_live_cycle_not_fixed.png" width="50%">
