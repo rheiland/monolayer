@@ -86,6 +86,7 @@ for idx in range(0,max_frame+1, hr_delta):
     # sub_conc.append(sconc)
 
 ax.plot(t, tumor_diam,'k-')
+ax.plot(t, tumor_diam,'k.')
 
 t2 = []
 tumor_diam2 = []
@@ -123,7 +124,8 @@ if add_points_flag:
 
 # ax.set(xlabel='t (day)', ylabel='diameter (micron)',title="monolayer growth")
 # ax.set(xlabel='T (unit)', ylabel='diameter (micron)',title="monolayer growth (PhysiCell)")
-ax.set(xlabel='calibrated time units (T)', ylabel='calibrated space units (S)',title="monolayer growth (PhysiCell)")
+# ax.set(xlabel='calibrated time units (T)', ylabel='diameter in calib space units (S)',title="monolayer growth (PhysiCell)")
+ax.set(xlabel='time (T)', ylabel='diameter (S)',title="monolayer growth (PhysiCell)")
 # ax.grid()
 # fig.savefig("test.png")
 plt.show()
