@@ -50,9 +50,8 @@ python analysis/plot_21cells_crop.py 90
 
 Note: 15 hrs in PhysiCell time units = 900 mins. Divide that by the 88.7 min (= 1 T unit; rf. above) to get ~10 T for the x-axis.
 
-<hr>
 
-## Monolayer
+## Monolayer - fixed cell cycle
 
 ```
 python analysis/plot_21cells_inner11_crop.py 100
@@ -60,7 +59,8 @@ python analysis/plot_21cells_inner11_crop.py 100
 <img src="./images/mono_live_cycle_fixed.png" width="50%">
 <img src="./images/mono_mechanics.png" width="50%">
 <img src="./images/mono_beta_threshold.png" width="40%">
-<img src="./images/mono_2d_12hr.png" width="35%"><img src="./images/mono_10k.png" width="35%">
+<img src="./images/mono_2d_12hr.png" width="35%">
+<img src="./images/mono_10k.png" width="35%">
 
 ```
 python analysis/plot_time_diam.py
@@ -69,13 +69,23 @@ python analysis/plot_time_diam.py
 Using calibrate time (T) and space (S) units.
 
 <hr>
-If we do not have a fixed cell cycle:
+## Monolayer - not a fixed cell cycle
+
 <img src="./images/mono_live_cycle_not_fixed.png" width="50%">
-<img src="./images/mono_2d_12hr_not_fixed_cycle.png" width="35%"><img src="./images/mono_10k_not_fixed_cycle.png" width="35%">
 
-<img src="./images/monolayer_time_diam_not_fixed_cycle.png" width="40%">
+<p float="left">
+  <img src="./images/mono_2d_12hr.png" width="35%">
+  <img src="./images/mono_2d_12hr_not_fixed_cycle.png" width="35%">
+</p>
+<p float="left">
+  <img src="./images/mono_10k.png" width="35%">
+  <img src="./images/mono_10k_not_fixed_cycle.png" width="35%">
+</p>
 
-
+<p float="left">
+  <img src="./images/monolayer_time_diam.png" width="40%" />
+  <img src="./images/monolayer_time_diam_not_fixed_cycle.png" width="40%" />
+</p>
 
 
 
