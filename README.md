@@ -1,13 +1,16 @@
 # monolayer
 Monolayer OpenVT reference model using PhysiCell
 
-This repository simulates a growing monolayer model as part of the OpenVT project.
+This repository simulates a growing monolayer model as part of the OpenVT project. In the full monolayer model, cells:
+* have no adhesion
+* have a repulsive force
+* divide and grow to a target volume
 
 We use PhysiCell 1.14.2, but with an `/analysis` subdirectory and a modified `Makefile` that copies files from `/analysis` when doing a `make load ...`.
 
 ## Relaxation of 11 cells
 
-To begin, we have a simple model of 11 compressed cells in a horizontal line and let them mechanically relax:
+Before doing the full monolayer model, we begin with a simpler model of 11 compressed cells in a horizontal line and let them mechanically relax. In this model (and the 11+10 model that follows), cells do not divide.
 
 <img src="./images/relax_11cells_t0.png" width="30%">
 <img src="./images/relax_11cells_90pct.png" width="30%">
@@ -28,6 +31,8 @@ Next, let's plot the results for the relaxation of the 11 compressed cells:
 ```
 python analysis/plot_11cells_crop.py 48
 ```
+Note that this script will also create a .csv file that we need to upload to https://gitlab.com/rvet/monolayergrowth/-/tree/main/results/PhysiCell/Relaxation (be sure the .csv file has the required header).
+
 <img src="./images/relax_11cells.png" width="40%">
 <hr>
 
