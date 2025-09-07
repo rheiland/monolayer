@@ -69,7 +69,7 @@ python analysis/plot_time_diam.py
 Using calibrate time (T) and space (S) units.
 
 
-## Monolayer - not a fixed cell cycle
+## Monolayer - stochastic cell cycle
 
 <img src="./images/mono_live_cycle_not_fixed.png" width="50%">
 
