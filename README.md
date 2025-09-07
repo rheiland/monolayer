@@ -73,6 +73,7 @@ Using calibrate time (T) and space (S) units.
 
 <img src="./images/mono_live_cycle_not_fixed.png" width="50%">
 
+In the following side-by-side images, the left image is from the fixed cell cycle, the right from the non-fixed (stochastic) cell cycle.
 <p float="left">
   <img src="./images/mono_2d_12hr.png" width="35%">
   <img src="./images/mono_2d_12hr_not_fixed_cycle.png" width="35%">
