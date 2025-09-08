@@ -89,9 +89,40 @@ In the following side-by-side images, the left image is from the fixed cell cycl
 </p>
 
 <p float="left">
-  <img src="./images/monolayer_time_diam.png" width="40%" />
-  <img src="./images/monolayer_time_diam_not_fixed_cycle.png" width="40%" />
+  <img src="./images/diam_fixed_cycle.png" width="40%" />
+  <img src="./images/diam_stochastic_cycle.png" width="40%" />
 </p>
+
+<hr>
+
+## Monolayer - fixed (flow cyto sep) cell cycle + Bru data
+
+Using a different cell cycle than "live", with an 18 hour fixed cell cycle, and keeping units in PhysiCell mins and microns units, we demonstrate that, for a well chosen value of beta, we can match quite well the experimental data found in Bru.
+The cycle model was:
+```
+                <cycle code="6" name="Flow cytometry model (separated)">
+                    <phase_durations units="min">
+                        <duration index="0" fixed_duration="true">420</duration>
+                        <duration index="1" fixed_duration="true">360</duration>
+                        <duration index="2" fixed_duration="true">180</duration>
+                        <duration index="3" fixed_duration="true">120</duration>
+```
+Refer to the [full model](./monolayer_cytomsep_beta.xml) for more details.
+
+<p float="left">
+  <img src="./images/beta_085_Bru.png" width="40%" />
+  <img src="./images/beta_0875_Bru.png" width="40%" />
+</p>
+The red points are taken from the Bru (or Drasdo?) data:
+
+Relative time (hours) | Total time (hours) | Diameter (um) | Radius (um)
+|---|---|---|---|
+|0|336|1140|570|
+|50 |386 |1400|700 |            
+|72 |408 |1590 |795|
+|145|481|2040|1020|
+|170|506|2250|1125|
+|310|646|3040|1520|
 
 
 
