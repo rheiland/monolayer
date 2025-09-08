@@ -93,6 +93,11 @@ In the following side-by-side images, the left image is from the fixed cell cycl
   <img src="./images/diam_stochastic_cycle.png" width="40%" />
 </p>
 
+<p float="left">
+  <img src="./images/numcells_fixed_cycle.png" width="40%" />
+  <img src="./images/numcells_stochastic_cycle.png" width="40%" />
+</p>
+
 <hr>
 
 ## Monolayer - fixed (flow cyto sep) cell cycle + Bru data
