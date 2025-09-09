@@ -109,6 +109,12 @@ In the following side-by-side images, the left image is from the fixed cell cycl
 | 0.5 | <img src="./images/foo.png" width="50%"> | <img src="./images/foo.png" width="50%"> | <img src="./images/foo.png" width="50%"> |
 
 
+  <img src="./images/mtx_2_2.png" width="35%" />
+  
+ Only if $\beta$ > 0.95 and  $\gamma$ > 0.9 do we allow the cell cycle to progress --> very rough boundary.
+  
+
+
 
 <hr>
 
