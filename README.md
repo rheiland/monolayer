@@ -100,9 +100,21 @@ In the following side-by-side images, the left image is from the fixed cell cycl
 
 <hr>
 
+## Monolayer: $\gamma$, $\beta$ contact inhibition and boundary roughness
+
+|    |$\beta$= 0.5 | 0.8 | 0.9 |
+| :------- | :------ | :------ | :------- |
+| $\gamma$=0 | <img src="./images/foo.png" width="50%"> | <img src="./images/foo.png" width="50%"> | <img src="./images/mono_10k_not_fixed_cycle.png" width="50%"> |
+| 0.2 | <img src="./images/foo.png" width="50%"> | <img src="./images/foo.png" width="50%"> | <img src="./images/foo.png" width="50%"> |
+| 0.5 | <img src="./images/foo.png" width="50%"> | <img src="./images/foo.png" width="50%"> | <img src="./images/foo.png" width="50%"> |
+
+
+
+<hr>
+
 ## Monolayer - fixed (flow cyto sep) cell cycle + Bru data
 
-Using a different cell cycle than "live", with an 18 hour fixed cell cycle, and keeping units in PhysiCell mins and microns units, we demonstrate that, for a well chosen value of beta, we can match quite well the experimental data found in Bru.
+Using a different cell cycle than "live", with an 18 hour fixed cell cycle, and keeping units in PhysiCell mins and microns units, we demonstrate that, for a well chosen value of $\beta$, we can match quite well the experimental data found in Bru.
 The cycle model was:
 ```
                 <cycle code="6" name="Flow cytometry model (separated)">
