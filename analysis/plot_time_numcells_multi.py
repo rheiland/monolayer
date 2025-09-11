@@ -33,7 +33,8 @@ import matplotlib.pyplot as plt
 # print('frame, field = ',frame_idx, field_index)
 
 run_dirs = ["run1", "run2", "run3", "run4"] 
-run_colors = ["red", "green", "black", "orange"] 
+run_dirs = ["run1", "run2", "run3", "run4", "run5", "run6"] 
+run_colors = ["red", "green", "black", "orange", "cyan", "purple"] 
 
 #out_dir = "../PhysiCell/output_monolayer_pressure_set_behavior"
 tumor_diam=[]
@@ -45,9 +46,11 @@ hr_delta = 1
 #hr_delta = 10
 max_frame = 1000
 # for out_dir in run_dirs for run_color in run_colors:
+t=[]
+tumor_numcells=[]
 for out_dir,run_color in zip(run_dirs,run_colors):
-  t=[]
-  tumor_numcells=[]
+  t.clear()
+  tumor_numcells.clear()
   for idx in range(0,max_frame+1, hr_delta):
     xml_file = "output%08d.xml" % idx
     print("xml_file= ",xml_file)
@@ -67,6 +70,8 @@ for out_dir,run_color in zip(run_dirs,run_colors):
     # print('time (day)= ', current_time/1440. )
     num_cells = cells_x.shape[0]
     print("# cells= ",cells_x.shape[0])
+    # if num_cells > 10000:   # stop 1 output step short
+    #    break
     # diam = cells_x.max() - cells_x.min()
     # print("monolayer diam= ",diam)
 
@@ -76,8 +81,11 @@ for out_dir,run_color in zip(run_dirs,run_colors):
     # sub_intern.append(sintern)
     # sub_conc.append(sconc)
 
+  print("t=",t)
+  print("tumor_numcells=",tumor_numcells)
   ax.plot(t, tumor_numcells,'k-', label=out_dir, color=run_color)
   ax.plot(t, tumor_numcells,'k.')
+  print('--------------\n')
 
 
 # ax.set_xlim(0, 110)
