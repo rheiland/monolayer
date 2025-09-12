@@ -102,18 +102,24 @@ In the following side-by-side images, the left image is from the fixed cell cycl
 
 ## Monolayer: $\gamma$, $\beta$ contact inhibition and boundary roughness
 
-|    |$\beta$= 0.5 | 0.8 | 0.9 |
-| :------- | :------ | :------ | :------- |
-| $\gamma$=0 | <img src="./images/foo.png" width="50%"> | <img src="./images/foo.png" width="50%"> | <img src="./images/mono_10k_not_fixed_cycle.png" width="50%"> |
-| 0.2 | <img src="./images/foo.png" width="50%"> | <img src="./images/foo.png" width="50%"> | <img src="./images/foo.png" width="50%"> |
-| 0.5 | <img src="./images/foo.png" width="50%"> | <img src="./images/foo.png" width="50%"> | <img src="./images/foo.png" width="50%"> |
+I finally realized that it was more straightforward to implement a "logical" OR" (on the beta, gamma thresholds) to trigger inhibition (rather than a "logical AND" to trigger growth):
+```
+        set_single_behavior( pCell , "cycle entry" , 0.01124);   // rate=1/89   (allow cell growth)
+        if ((a_i < beta_threshold) || (f_i < gamma_threshold))   // a logical OR for inhibition
+        {
+            set_single_behavior( pCell , "cycle entry" , 0.0);      // arrest the cell cycle
+        }
+```
 
 
   <img src="./images/mtx_2_2.png" width="35%" />
+  With thresholds quite high (~0.9) we get a rough boundary.
+  <p>
   
- Only if $\beta$ > 0.95 and  $\gamma$ > 0.9 do we allow the cell cycle to progress --> very rough boundary.
-  
+<!-- Only if $\beta$ > 0.95 and  $\gamma$ > 0.9 do we allow the cell cycle to progress - very rough boundary.  -->
 
+<img src="./images/cell_counts_6runs.png" width="35%" />
+Cell growth (cell counts) over time for 6 different sets of parameters.
 
 
 <hr>
