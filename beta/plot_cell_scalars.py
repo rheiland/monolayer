@@ -30,7 +30,8 @@ argc = len(sys.argv)
 print('argv=',sys.argv)
 print('argv[0]=',sys.argv[0])
 
-current_frame = int(sys.argv[1])
+output_dir = sys.argv[1]
+current_frame = int(sys.argv[2])
 print("current_frame= ",current_frame)
 # p1=string.atof(sys.argv[1])
 
@@ -90,6 +91,7 @@ class Vis():
 
         # self.output_dir = "/Users/heiland/dev/PhysiCell_V.1.8.0_release/output"
         self.output_dir = "./output"
+        self.output_dir = output_dir
 
         self.customized_output_freq = False
 
@@ -97,6 +99,7 @@ class Vis():
         self.cell_scalar_updated = True
         self.view_aspect_square = True
         self.cbar_label_fontsize = 8
+        self.cbar_label_fontsize = 10
         self.title_fontsize = 10
         self.cbar2 = None
         self.figure = None
@@ -143,48 +146,6 @@ class Vis():
         else:
             return df_all_cells
         
-
-    def open_directory_cb(self):
-        dialog = QFileDialog()
-        dir_path = dialog.getExistingDirectory(self, 'Select an output directory')
-        print("open_directory_cb:  output_dir=",dir_path)
-        # if self.output_dir is "":
-        if dir_path == "":
-            return
-
-        self.output_dir = dir_path
-
-        self.output_dir_w.setText(self.output_dir)
-        # Verify initial.xml and at least one .svg file exist. Obtain bounds from initial.xml
-        # tree = ET.parse(self.output_dir + "/" + "initial.xml")
-        xml_file = Path(self.output_dir, "initial.xml")
-        if not os.path.isfile(xml_file):
-            print("Expecting initial.xml, but does not exist.")
-            return
-
-        tree = ET.parse(Path(self.output_dir, "initial.xml"))
-        xml_root = tree.getroot()
-
-        bds_str = xml_root.find(".//microenvironment//domain//mesh//bounding_box").text
-        bds = bds_str.split()
-        print('bds=',bds)
-        self.xmin = float(bds[0])
-        self.xmax = float(bds[3])
-        self.x_range = self.xmax - self.xmin
-
-        self.ymin = float(bds[1])
-        self.ymax = float(bds[4])
-        self.y_range = self.ymax - self.ymin
-
-        # and plot 1st frame (.svg)
-        self.current_frame = current_frame
-        self.forward_plot_cb("")  
-
-
-    # def output_dir_changed(self, text):
-    #     self.output_dir = text
-    #     print(self.output_dir)
-
 
     def reset_plot_cb(self, text):
         print("-------------- reset_plot_cb() ----------------")
