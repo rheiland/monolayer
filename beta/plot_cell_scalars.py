@@ -1,4 +1,5 @@
 import sys
+import glob
 import string
 import os
 import time
@@ -160,13 +161,25 @@ class Vis():
 
         self.create_figure()
 
-
         self.reset_plot_cb("")
 
-        self.plot_cell_scalar(current_frame)
+        if self.current_frame < 0:
+            xml_pattern = self.output_dir + "/" + "*.xml"
+            xml_files = glob.glob(xml_pattern)
+            xml_files.sort()
+            # print("xml_files= ",xml_files)
+            last_file = xml_files[-1]
+            # print("last file= ",last_file)
+            print("last index= ",last_file[-12:-4])
+            self.current_frame = int(last_file[-12:-4])
+            # self.current_frame = 3
+
+        self.plot_cell_scalar(self.current_frame)
         png_filename = Path(self.output_dir,f'frame{self.current_frame}')
         plt.savefig(png_filename)
-        plt.show()
+        png_filename = Path(self.output_dir,'keep.png')
+        plt.savefig(png_filename)
+        # plt.show()
 
 
     def get_mcds_cells_df(self, mcds):
@@ -216,55 +229,6 @@ class Vis():
         # self.plot_substrate(self.current_frame)
         # self.canvas.update()
         # self.canvas.draw()
-
-    # def task(self):
-            # self.dc.update_figure()
-    def play_plot_cb(self):
-        for idx in range(1):
-            self.current_frame += 1
-            print('svg # ',self.current_frame)
-
-            fname = "snapshot%08d.svg" % self.current_frame
-            full_fname = os.path.join(self.output_dir, fname)
-            # print("full_fname = ",full_fname)
-            # with debug_view:
-                # print("plot_cell_scalar:", full_fname) 
-            # print("-- plot_cell_scalar:", full_fname) 
-            if not os.path.isfile(full_fname):
-                # print("Once output files are generated, click the slider.")   
-                print("ERROR:  filename not found.")
-                return
-
-            # self.plot_substrate(self.current_frame)
-            self.plot_cell_scalar(self.current_frame)
-            self.canvas.update()
-            self.canvas.draw()
-
-    def animate(self, text):
-        self.current_frame = 0
-        # self.timer = QtCore.QTimer()
-        # self.timer.timeout.connect(self.play_plot_cb)
-        # self.timer.start(2000)  # every 2 sec
-        self.timer.start(100)
-
-    # def play_plot_cb0(self, text):
-    #     for idx in range(10):
-    #         self.current_frame += 1
-    #         print('svg # ',self.current_frame)
-    #         self.plot_cell_scalar(self.current_frame)
-    #         self.canvas.update()
-    #         self.canvas.draw()
-    #         # time.sleep(1)
-    #         # self.ax0.clear()
-    #         # self.canvas.pause(0.05)
-
-    def prepare_plot_cb(self, text):
-        self.current_frame += 1
-        print('prepare_plot_cb: frame # ',self.current_frame)
-        # self.plot_substrate(self.current_frame)
-        self.plot_cell_scalar(self.current_frame)
-        self.canvas.update()
-        self.canvas.draw()
 
     #---------------------------------------------------------------------------
     def create_figure(self):
