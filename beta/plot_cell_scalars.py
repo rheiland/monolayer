@@ -27,13 +27,42 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 from pyMCDS import pyMCDS
 
 argc = len(sys.argv)
+if argc < 5:
+    print("Usage:  args = output_dir colorbar_name frame show_colorbar [xmin xmax ymin ymax]")
+    sys.exit()
 print('argv=',sys.argv)
-print('argv[0]=',sys.argv[0])
+print('argc = len(argv)=',len(sys.argv))
 
-output_dir = sys.argv[1]
-current_frame = int(sys.argv[2])
+idx = 0
+print('argv[0]=',sys.argv[idx])
+
+idx += 1
+output_dir = sys.argv[idx]
+idx += 1
+colorbar_name = sys.argv[idx]
+print("colorbar_name= ",colorbar_name)
+idx += 1
+current_frame = int(sys.argv[idx])
 print("current_frame= ",current_frame)
 # p1=string.atof(sys.argv[1])
+
+idx += 1
+show_colorbar = int(sys.argv[idx])
+
+print("idx, argc= ",idx,argc)
+if idx + 1 == argc:
+    fixed_axes = False
+else:
+    fixed_axes = True
+    idx += 1
+    plot_xmin = float(sys.argv[idx])
+    idx += 1
+    plot_xmax = float(sys.argv[idx])
+    idx += 1
+    plot_ymin = float(sys.argv[idx])
+    idx += 1
+    plot_ymax = float(sys.argv[idx])
+
 
 class Vis():
     def __init__(self):
@@ -93,6 +122,17 @@ class Vis():
         self.output_dir = "./output"
         self.output_dir = output_dir
 
+        self.fixed_axes = fixed_axes
+        if self.fixed_axes:
+            self.plot_xmin = plot_xmin
+            self.plot_xmax = plot_xmax
+            self.plot_ymin = plot_ymin
+            self.plot_ymax = plot_ymax
+
+        self.cbar_name = colorbar_name
+
+        self.show_colorbar = show_colorbar
+
         self.customized_output_freq = False
 
         # rwh hacks (originally gen'd vis_base.py)
@@ -118,20 +158,15 @@ class Vis():
         label_height = 20
         units_width = 70
 
-        # self.create_figure()
-
-
         self.create_figure()
 
-        # self.scroll.setWidget(self.config_params) # self.config_params = QWidget()
 
         self.reset_plot_cb("")
 
-        # self.plot_cell_scalar(self.current_frame)
         self.plot_cell_scalar(current_frame)
+        png_filename = Path(self.output_dir,f'frame{self.current_frame}')
+        plt.savefig(png_filename)
         plt.show()
-        # self.canvas.update()
-        # self.canvas.draw()
 
 
     def get_mcds_cells_df(self, mcds):
@@ -148,7 +183,7 @@ class Vis():
         
 
     def reset_plot_cb(self, text):
-        print("-------------- reset_plot_cb() ----------------")
+        # print("-------------- reset_plot_cb() ----------------")
         xml_file = Path(self.output_dir, "initial.xml")
         if not os.path.isfile(xml_file):
             print("Expecting initial.xml, but does not exist.")
@@ -173,7 +208,7 @@ class Vis():
         # self.numy =  math.ceil( (self.ymax - self.ymin) / config_tab.ydelta.value)
         self.numx =  math.ceil( (self.xmax - self.xmin) / 20.)
         self.numy =  math.ceil( (self.ymax - self.ymin) / 20.)
-        print(" calc: numx,numy = ",self.numx, self.numy)
+        # print(" calc: numx,numy = ",self.numx, self.numy)
 
         self.current_frame = current_frame
         print('frame # ',self.current_frame)
@@ -233,7 +268,7 @@ class Vis():
 
     #---------------------------------------------------------------------------
     def create_figure(self):
-        print("\n--   vis_tab_cell_scalars.py: --------- create_figure(): ------- creating figure, canvas, ax0")
+        # print("\n--   vis_tab_cell_scalars.py: --------- create_figure(): ------- creating figure, canvas, ax0")
         if self.figure is not None:
             print("              self.figure is None, so return!")
             return
@@ -364,7 +399,8 @@ class Vis():
         else:
             cell_scalar_mcds_name = cell_scalar_humanreadable_name
         # cbar_name = self.cell_scalar_cbar_combobox.currentText()
-        cbar_name = "RdBu"
+        # cbar_name = "RdBu"
+        cbar_name = self.cbar_name
         if not Path(xml_file).is_file():
             print("ERROR: file not found",xml_file)
             return
@@ -389,7 +425,7 @@ class Vis():
         else:
             vmin = cell_scalar.min()
             vmax = cell_scalar.max()
-        print("---- vmin,vmax= ",vmin,vmax)
+        # print("---- vmin,vmax= ",vmin,vmax)
 
         num_cells = len(cell_scalar)
         # print("  len(cell_scalar) = ",len(cell_scalar))
@@ -504,48 +540,50 @@ class Vis():
         # if num_axes > 1: 
         # if self.axis_id_cellscalar:
     
-        if( self.discrete_variable ): # Generic way: if variable is discrete
-            # Then we don't need the cax2
-            if self.cax2 is not None:
-                try:
-                    self.cax2.remove()
-                    self.cax2 = None
+        if self.show_colorbar:
+            if( self.discrete_variable ): # Generic way: if variable is discrete
+                # Then we don't need the cax2
+                if self.cax2 is not None:
+                    try:
+                        self.cax2.remove()
+                        self.cax2 = None
+                    except:
+                        pass
+                # Coloring the cells as it used to be
+                cell_plot.set_clim(vmin=-0.5,vmax=len(self.discrete_variable)-0.5) 
+                
+                # Creating empty plots to add the legend
+                lp = lambda i: plt.plot([],color=cmaps.paint_clist[i], ms=np.sqrt(81), mec="none",
+                                        label="Feature {:g}".format(i), ls="", marker="o")[0]
+                handles = [lp(self.discrete_variable.index(i)) for i in sorted(list(self.discrete_variable_observed)) if i in self.discrete_variable]
+                try: # cautionary for out of date mpl versions, e.g., nanoHUB
+                    self.ax0.legend(handles=handles,title=cell_scalar_humanreadable_name, labels=names_observed, loc='upper center', bbox_to_anchor=(0.5, -0.15),ncols=4)
                 except:
                     pass
-            # Coloring the cells as it used to be
-            cell_plot.set_clim(vmin=-0.5,vmax=len(self.discrete_variable)-0.5) 
-            
-            # Creating empty plots to add the legend
-            lp = lambda i: plt.plot([],color=cmaps.paint_clist[i], ms=np.sqrt(81), mec="none",
-                                    label="Feature {:g}".format(i), ls="", marker="o")[0]
-            handles = [lp(self.discrete_variable.index(i)) for i in sorted(list(self.discrete_variable_observed)) if i in self.discrete_variable]
-            try: # cautionary for out of date mpl versions, e.g., nanoHUB
-                self.ax0.legend(handles=handles,title=cell_scalar_humanreadable_name, labels=names_observed, loc='upper center', bbox_to_anchor=(0.5, -0.15),ncols=4)
-            except:
-                pass
 
-        else:   # Note: vis_tab_ecm.py seems to avoid any memory leak and with simpler code
-            # If it's not there, we create it
-            if self.cax2 is None:
-                self.cax2 = self.figure.add_subplot(self.gs[1,0])
-                # ax2_divider = make_axes_locatable(self.ax0)
-                # self.cax2 = ax2_divider.append_axes("bottom", size="4%", pad="8%")
-            if self.cbar2 is None:
-                self.cbar2 = self.figure.colorbar(cell_plot, ticks=None, cax=self.cax2, orientation="horizontal")
-                self.cbar2.ax.tick_params(labelsize=self.fontsize)
-            elif self.cell_scalar_updated:
-                self.cbar2 = self.figure.colorbar(cell_plot, ticks=None, cax=self.cax2, orientation="horizontal")
-                self.cell_scalar_updated = False
-            else:
-                self.cbar2.update_normal(cell_plot)  # partial fix for memory leak
+            else:   # Note: vis_tab_ecm.py seems to avoid any memory leak and with simpler code
+                # If it's not there, we create it
+                if self.cax2 is None:
+                    self.cax2 = self.figure.add_subplot(self.gs[1,0])
+                    # ax2_divider = make_axes_locatable(self.ax0)
+                    # self.cax2 = ax2_divider.append_axes("bottom", size="4%", pad="8%")
+                if self.cbar2 is None:
+                    self.cbar2 = self.figure.colorbar(cell_plot, ticks=None, cax=self.cax2, orientation="horizontal")
+                    self.cbar2.ax.tick_params(labelsize=self.fontsize)
+                elif self.cell_scalar_updated:
+                    self.cbar2 = self.figure.colorbar(cell_plot, ticks=None, cax=self.cax2, orientation="horizontal")
+                    self.cell_scalar_updated = False
+                else:
+                    self.cbar2.update_normal(cell_plot)  # partial fix for memory leak
 
-            self.cbar2.ax.set_xlabel(cell_scalar_humanreadable_name, fontsize=self.cbar_label_fontsize)
+                self.cbar2.ax.set_xlabel(cell_scalar_humanreadable_name, fontsize=self.cbar_label_fontsize)
    
         self.ax0.set_title(self.title_str, fontsize=self.title_fontsize)
 
         # rwh
-        # self.ax0.set_xlim(self.plot_xmin, self.plot_xmax)
-        # self.ax0.set_ylim(self.plot_ymin, self.plot_ymax)
+        if self.fixed_axes:
+            self.ax0.set_xlim(self.plot_xmin, self.plot_xmax)
+            self.ax0.set_ylim(self.plot_ymin, self.plot_ymax)
 
         if self.view_aspect_square:
             self.ax0.set_aspect('equal')
