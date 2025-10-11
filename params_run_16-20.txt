@@ -2,7 +2,7 @@
 # Allows for changing parameters in .xml, running sim, and writing results to different folders.
 # <key> <value> pairs, where <key> is the first unique node name found in the xml.
 folder  run16
-max_time 36000
+max_time 3600000
 full_data.enable true
 gamma_threshold 0.93
 beta_threshold 0.2

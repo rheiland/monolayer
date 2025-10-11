@@ -164,12 +164,12 @@ class Vis():
         self.reset_plot_cb("")
 
         if self.current_frame < 0:
-            xml_pattern = self.output_dir + "/" + "*.xml"
+            xml_pattern = self.output_dir + "/" + "output*.xml"
             xml_files = glob.glob(xml_pattern)
             xml_files.sort()
-            # print("xml_files= ",xml_files)
+            print("xml_files= ",xml_files)
             last_file = xml_files[-1]
-            # print("last file= ",last_file)
+            print("last file= ",last_file)
             print("last index= ",last_file[-12:-4])
             self.current_frame = int(last_file[-12:-4])
             # self.current_frame = 3
