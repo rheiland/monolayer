@@ -1,0 +1,26 @@
+# File to be used with params_run.py
+# Allows for changing parameters in .xml, running sim, and writing results to different folders.
+# <key> <value> pairs, where <key> is the first unique node name found in the xml.
+folder  run6
+max_time 36000
+full_data.enable true
+gamma_threshold 0.5
+beta_threshold 0.2
+run_it 1
+#
+folder  run7 
+beta_threshold 0.9
+run_it 1
+#
+folder  run8 
+beta_threshold 0.93
+run_it 1
+#
+folder  run9 
+beta_threshold 0.95
+run_it 1
+#
+folder  run10 
+beta_threshold 0.96
+run_it 1
+#
