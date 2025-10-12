@@ -426,7 +426,8 @@ class Vis():
             else: 
                 try:
                     # cbar_name = from_list(None, cmaps.paint_clist[0:len(self.discrete_variable)], len(self.discrete_variable))
-                    cbar_name = from_list(None, [[0,1,0],[0,0,1],[1,1,0],[1,0,0]], len(self.discrete_variable))
+                    # Lutz: light-green, light-blue, yellow, red
+                    cbar_name = from_list(None, [[0.5, 1, 0.5],[0,0.5,1],[1,1,0],[1,0,0]], len(self.discrete_variable))
                     # print("cmaps.paint_clist=",cmaps.paint_clist)
                     # print("cbar_name=",cbar_name) # <matplotlib.colors.LinearSegmentedColormap
                 except:
