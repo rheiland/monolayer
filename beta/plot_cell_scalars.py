@@ -346,6 +346,7 @@ class Vis():
 
     #------------------------------------------------------------
     def plot_cell_scalar(self, frame):
+        print("~~~ plot_cell_scalar()")
         self.disable_cell_scalar_cb = False
         if self.disable_cell_scalar_cb:
             return
@@ -411,6 +412,35 @@ class Vis():
         # self.title_str += "   cells: " + svals[2] + "d, " + svals[4] + "h, " + svals[7][:-3] + "m"
         # self.title_str = "(" + str(frame) + ") Current time: " + str(total_min) + "m"
         
+        #-----------------------------------------------------
+        # rwh - unique to OpenVT monolayer model
+        if cell_scalar_mcds_name == "beta_or_gamma": 
+            print("------- doing discrete beta_or_gamma")
+            self.discrete_variable = [0,1,2,3]
+
+            # names_observed = ["phase #%d" % i for i in sorted(list(self.discrete_variable_observed)) if i in [0,1,2,3]]
+            from_list = matplotlib.colors.LinearSegmentedColormap.from_list
+            self.discrete_variable.sort()
+            if (len(self.discrete_variable) == 1): 
+                cbar_name = from_list(None, cmaps.gray_gray[0:2], len(self.discrete_variable))  # annoying hack
+            else: 
+                try:
+                    # cbar_name = from_list(None, cmaps.paint_clist[0:len(self.discrete_variable)], len(self.discrete_variable))
+                    cbar_name = from_list(None, [[0,1,0],[0,0,1],[1,1,0],[1,0,0]], len(self.discrete_variable))
+                    # print("cmaps.paint_clist=",cmaps.paint_clist)
+                    # print("cbar_name=",cbar_name) # <matplotlib.colors.LinearSegmentedColormap
+                except:
+                    return
+
+            # usual categorical colormap on matplotlib has at max 20 colors (using colorcet the colormap glasbey_bw has n colors )
+            # cbar_name = from_list(None, cc.glasbey_bw, len(self.discrete_variable))
+            vmin = None
+            vmax = None
+            # Change the values between 0 and number of possible values
+            for i, value in enumerate(self.discrete_variable):
+                cell_scalar = cell_scalar.replace(value,i)
+
+        #-----------------------------------------------------
         if cell_scalar_mcds_name in self.discrete_cell_scalars: 
 
             self.discrete_variable_observed = self.discrete_variable_observed.union(set([int(i) for i in np.unique(cell_scalar)]))
@@ -440,6 +470,8 @@ class Vis():
             elif cell_scalar_mcds_name == "dead":
                 self.discrete_variable = [0,1]
                 names_observed = ["dead" if i == 1 else "alive" for i in sorted(list(self.discrete_variable_observed)) if i in [0,1]]
+
+
             else:
                 self.discrete_variable = [int(i) for i in list(set(cell_scalar))] # It's a set of possible value of the variable
                 names_observed = [str(int(i)) for i in sorted(list(self.discrete_variable_observed))] 
@@ -508,7 +540,10 @@ class Vis():
         # if self.axis_id_cellscalar:
     
         if self.show_colorbar:
+
+            # rwh:
             if( self.discrete_variable ): # Generic way: if variable is discrete
+            # if( self.discrete_variable or cell_scalar_mcds_name == "beta_or_gamma"): # Generic way: if variable is discrete
                 # Then we don't need the cax2
                 if self.cax2 is not None:
                     try:
@@ -538,12 +573,15 @@ class Vis():
                     self.cbar2 = self.figure.colorbar(cell_plot, ticks=None, cax=self.cax2, orientation="horizontal")
                     self.cbar2.ax.tick_params(labelsize=self.fontsize)
                 elif self.cell_scalar_updated:
+                    print("cbar #2")
                     self.cbar2 = self.figure.colorbar(cell_plot, ticks=None, cax=self.cax2, orientation="horizontal")
                     self.cell_scalar_updated = False
                 else:
                     self.cbar2.update_normal(cell_plot)  # partial fix for memory leak
 
-                self.cbar2.ax.set_xlabel(cell_scalar_humanreadable_name, fontsize=self.cbar_label_fontsize)
+                # self.cbar_label_fontsize = 0  #rwh
+                if cell_scalar_mcds_name != "beta_or_gamma": 
+                    self.cbar2.ax.set_xlabel(cell_scalar_humanreadable_name, fontsize=self.cbar_label_fontsize)
    
         self.ax0.set_title(self.title_str, fontsize=self.title_fontsize)
 
@@ -673,6 +711,7 @@ def main():
     colorbar_name = "RdBu"
     show_colorbar = False
     scalar_name = "a_i"
+    beta_gamma = False
     try:
         parser = argparse.ArgumentParser(description='Monolayer plot ')
 
@@ -680,7 +719,8 @@ def main():
 
         parser.add_argument("-o ", "--output_dir", type=str, help="output directory")
         parser.add_argument("-f ", "--frame", type=int, help="current frame to plot")
-        parser.add_argument("-a ", "--axes_fixed", type=bool, help="fixed axes")
+        # parser.add_argument("-a ", "--axes_fixed", type=bool, help="fixed axes")
+        parser.add_argument("-a ", "--axes_fixed", dest="axes_fixed", help="fixed axes", action="store_true")
         parser.add_argument("-c ", "--colorbar_name", type=str, help="mpl colorbar name")
         parser.add_argument("-b ", "--show_colorbar", dest="show_colorbar", help="show colorbar", action="store_true")
         parser.add_argument("-s ", "--scalar_name", type=str, help="scalar value [a_i]")
@@ -699,7 +739,8 @@ def main():
         if args.frame:
             current_frame = args.frame
         if args.axes_fixed:
-            axes_fixed = args.axes_fixed
+            # axes_fixed = args.axes_fixed
+            axes_fixed= True
         if args.colorbar_name:
             colorbar_name = args.colorbar_name
         if args.show_colorbar:
