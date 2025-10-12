@@ -71,6 +71,8 @@ class Vis():
         super().__init__()
         # global self.config_params
 
+        print("\n--- Vis()  plot_xmax=", plot_xmax)
+
         self.xml_root = None
         self.current_frame = current_frame
         # self.timer = QtCore.QTimer()
@@ -130,6 +132,7 @@ class Vis():
             self.plot_xmax = plot_xmax
             self.plot_ymin = plot_ymin
             self.plot_ymax = plot_ymax
+            print("\n--- setting  plot_xmax=", self.plot_xmax)
 
         self.cbar_name = colorbar_name
 
@@ -588,6 +591,7 @@ class Vis():
 
         # rwh
         if self.fixed_axes:
+            print("plotting fixed_axes:  xmax=", self.plot_xmax)
             self.ax0.set_xlim(self.plot_xmin, self.plot_xmax)
             self.ax0.set_ylim(self.plot_ymin, self.plot_ymax)
 
@@ -730,7 +734,7 @@ def main():
         parser.add_argument("-b ", "--show_colorbar", dest="show_colorbar", help="show colorbar", action="store_true")
         parser.add_argument("-s ", "--scalar_name", type=str, help="scalar value [a_i]")
         parser.add_argument("-x0 ", "--xmin", type=float, help="plot xmin")
-        parser.add_argument("-x1 ", "--xmax", type=float, help="plot xmax")
+        parser.add_argument("-x1 ", "--xmax", type=float, help="plot xmin")
         parser.add_argument("-y0 ", "--ymin", type=float, help="plot ymin")
         parser.add_argument("-y1 ", "--ymax", type=float, help="plot ymax")
 
@@ -758,12 +762,16 @@ def main():
             scalar_name= args.scalar_name
         if args.xmin:
             plot_xmin = args.xmin
+            print("args.xmin= ",plot_xmin)
         if args.xmax:
             plot_xmax = args.xmax
+            print("args.xmax= ",plot_xmax)
         if args.ymin:
             plot_ymin = args.ymin
+            print("args.ymin= ",plot_ymin)
         if args.ymax:
             plot_ymax = args.ymax
+            print("args.ymax= ",plot_ymax)
 
     except:
         print("Error parsing command line args.")
