@@ -67,7 +67,7 @@ from pyMCDS import pyMCDS
 
 
 class Vis():
-    def __init__(self, output_dir, current_frame,axes_fixed,colorbar_name,show_colorbar,scalar_name):
+    def __init__(self, output_dir, current_frame,axes_fixed,colorbar_name,show_colorbar,scalar_name,plot_xmin,plot_xmax,plot_ymin,plot_ymax):
         super().__init__()
         # global self.config_params
 
@@ -713,6 +713,10 @@ def main():
     show_colorbar = False
     scalar_name = "a_i"
     beta_gamma = False
+    plot_xmin = 0.0
+    plot_xmax = 100.0
+    plot_ymin = 0.0
+    plot_ymax = 100.0
     try:
         parser = argparse.ArgumentParser(description='Monolayer plot ')
 
@@ -725,6 +729,10 @@ def main():
         parser.add_argument("-c ", "--colorbar_name", type=str, help="mpl colorbar name")
         parser.add_argument("-b ", "--show_colorbar", dest="show_colorbar", help="show colorbar", action="store_true")
         parser.add_argument("-s ", "--scalar_name", type=str, help="scalar value [a_i]")
+        parser.add_argument("-x0 ", "--xmin", type=float, help="plot xmin")
+        parser.add_argument("-x1 ", "--xmax", type=float, help="plot xmax")
+        parser.add_argument("-y0 ", "--ymin", type=float, help="plot ymin")
+        parser.add_argument("-y1 ", "--ymax", type=float, help="plot ymax")
 
         # args = parser.parse_args()
         args, unknown = parser.parse_known_args()
@@ -748,15 +756,23 @@ def main():
             show_colorbar= True
         if args.scalar_name:
             scalar_name= args.scalar_name
+        if args.xmin:
+            plot_xmin = args.xmin
+        if args.xmax:
+            plot_xmax = args.xmax
+        if args.ymin:
+            plot_ymin = args.ymin
+        if args.ymax:
+            plot_ymax = args.ymax
 
     except:
         print("Error parsing command line args.")
         sys.exit(-1)
 
-    print(f'output_dir={output_dir}, current_frame={current_frame}, axes_fixed={axes_fixed}, colorbar={colorbar_name}, show_colorbar={show_colorbar} ')
+    print(f'output_dir={output_dir}, current_frame={current_frame}, axes_fixed={axes_fixed}, colorbar={colorbar_name}, show_colorbar={show_colorbar}, xmax={plot_xmax} ')
     
     # show_colorbar = True
-    vis_tab = Vis(output_dir,current_frame,axes_fixed,colorbar_name,show_colorbar,scalar_name )
+    vis_tab = Vis(output_dir,current_frame,axes_fixed,colorbar_name,show_colorbar,scalar_name, plot_xmin,plot_xmax,plot_ymin,plot_ymax )
 	
 if __name__ == '__main__':
     main()
