@@ -1,5 +1,6 @@
 import sys
 import glob
+import argparse
 import string
 import os
 import time
@@ -27,46 +28,46 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 from pyMCDS import pyMCDS
 
-argc = len(sys.argv)
-if argc < 5:
-    print("Usage:  args = output_dir colorbar_name frame show_colorbar [xmin xmax ymin ymax]")
-    sys.exit()
-print('argv=',sys.argv)
-print('argc = len(argv)=',len(sys.argv))
+# argc = len(sys.argv)
+# if argc < 5:
+#     print("Usage:  args = output_dir colorbar_name frame show_colorbar [xmin xmax ymin ymax]")
+#     sys.exit()
+# print('argv=',sys.argv)
+# print('argc = len(argv)=',len(sys.argv))
 
-idx = 0
-print('argv[0]=',sys.argv[idx])
+# idx = 0
+# print('argv[0]=',sys.argv[idx])
 
-idx += 1
-output_dir = sys.argv[idx]
-idx += 1
-colorbar_name = sys.argv[idx]
-print("colorbar_name= ",colorbar_name)
-idx += 1
-current_frame = int(sys.argv[idx])
-print("current_frame= ",current_frame)
-# p1=string.atof(sys.argv[1])
+# idx += 1
+# output_dir = sys.argv[idx]
+# idx += 1
+# colorbar_name = sys.argv[idx]
+# print("colorbar_name= ",colorbar_name)
+# idx += 1
+# current_frame = int(sys.argv[idx])
+# print("current_frame= ",current_frame)
+# # p1=string.atof(sys.argv[1])
 
-idx += 1
-show_colorbar = int(sys.argv[idx])
+# idx += 1
+# show_colorbar = int(sys.argv[idx])
 
-print("idx, argc= ",idx,argc)
-if idx + 1 == argc:
-    fixed_axes = False
-else:
-    fixed_axes = True
-    idx += 1
-    plot_xmin = float(sys.argv[idx])
-    idx += 1
-    plot_xmax = float(sys.argv[idx])
-    idx += 1
-    plot_ymin = float(sys.argv[idx])
-    idx += 1
-    plot_ymax = float(sys.argv[idx])
+# print("idx, argc= ",idx,argc)
+# if idx + 1 == argc:
+#     fixed_axes = False
+# else:
+#     fixed_axes = True
+#     idx += 1
+#     plot_xmin = float(sys.argv[idx])
+#     idx += 1
+#     plot_xmax = float(sys.argv[idx])
+#     idx += 1
+#     plot_ymin = float(sys.argv[idx])
+#     idx += 1
+#     plot_ymax = float(sys.argv[idx])
 
 
 class Vis():
-    def __init__(self):
+    def __init__(self, output_dir, current_frame,axes_fixed,colorbar_name,show_colorbar,scalar_name):
         super().__init__()
         # global self.config_params
 
@@ -123,7 +124,7 @@ class Vis():
         self.output_dir = "./output"
         self.output_dir = output_dir
 
-        self.fixed_axes = fixed_axes
+        self.fixed_axes = axes_fixed
         if self.fixed_axes:
             self.plot_xmin = plot_xmin
             self.plot_xmax = plot_xmax
@@ -133,6 +134,7 @@ class Vis():
         self.cbar_name = colorbar_name
 
         self.show_colorbar = show_colorbar
+        self.scalar_name = scalar_name
 
         self.customized_output_freq = False
 
@@ -179,7 +181,7 @@ class Vis():
         plt.savefig(png_filename)
         png_filename = Path(self.output_dir,'keep.png')
         plt.savefig(png_filename)
-        # plt.show()
+        plt.show()
 
 
     def get_mcds_cells_df(self, mcds):
@@ -223,7 +225,7 @@ class Vis():
         self.numy =  math.ceil( (self.ymax - self.ymin) / 20.)
         # print(" calc: numx,numy = ",self.numx, self.numy)
 
-        self.current_frame = current_frame
+        # self.current_frame = current_frame
         print('frame # ',self.current_frame)
         self.plot_cell_scalar(self.current_frame)
         # self.plot_substrate(self.current_frame)
@@ -357,7 +359,8 @@ class Vis():
         xml_file_root = "output%08d.xml" % frame
         xml_file = os.path.join(self.output_dir, xml_file_root)
         # cell_scalar_humanreadable_name = self.cell_scalar_combobox.currentText()
-        cell_scalar_humanreadable_name = "a_i"
+        # cell_scalar_humanreadable_name = "a_i"
+        cell_scalar_humanreadable_name = self.scalar_name
         if cell_scalar_humanreadable_name in self.cell_scalar_human2mcds_dict.keys():
             cell_scalar_mcds_name = self.cell_scalar_human2mcds_dict[cell_scalar_humanreadable_name]
         else:
@@ -664,8 +667,54 @@ class Vis():
             self.plot_cell_scalar(self.svg_frame)
 
 def main():
-    inputfile = ''
-    vis_tab = Vis()
+    output_dir = "output"
+    current_frame = 1
+    axes_fixed = False
+    colorbar_name = "RdBu"
+    show_colorbar = False
+    scalar_name = "a_i"
+    try:
+        parser = argparse.ArgumentParser(description='Monolayer plot ')
+
+    #   print("Usage:  args = output_dir colorbar_name frame show_colorbar [xmin xmax ymin ymax]")
+
+        parser.add_argument("-o ", "--output_dir", type=str, help="output directory")
+        parser.add_argument("-f ", "--frame", type=int, help="current frame to plot")
+        parser.add_argument("-a ", "--axes_fixed", type=bool, help="fixed axes")
+        parser.add_argument("-c ", "--colorbar_name", type=str, help="mpl colorbar name")
+        parser.add_argument("-b ", "--show_colorbar", dest="show_colorbar", help="show colorbar", action="store_true")
+        parser.add_argument("-s ", "--scalar_name", type=str, help="scalar value [a_i]")
+
+        # args = parser.parse_args()
+        args, unknown = parser.parse_known_args()
+        print("args=",args)
+        print("unknown=",unknown)
+        if unknown:
+            print("len(unknown)= ",len(unknown))
+            print("Invalid argument(s): ",unknown)
+            print("Use '--help' to see options.")
+            sys.exit(-1)
+        if args.output_dir:
+            output_dir = args.output_dir
+        if args.frame:
+            current_frame = args.frame
+        if args.axes_fixed:
+            axes_fixed = args.axes_fixed
+        if args.colorbar_name:
+            colorbar_name = args.colorbar_name
+        if args.show_colorbar:
+            show_colorbar= True
+        if args.scalar_name:
+            scalar_name= args.scalar_name
+
+    except:
+        print("Error parsing command line args.")
+        sys.exit(-1)
+
+    print(f'output_dir={output_dir}, current_frame={current_frame}, axes_fixed={axes_fixed}, colorbar={colorbar_name}, show_colorbar={show_colorbar} ')
+    
+    # show_colorbar = True
+    vis_tab = Vis(output_dir,current_frame,axes_fixed,colorbar_name,show_colorbar,scalar_name )
 	
 if __name__ == '__main__':
     main()
