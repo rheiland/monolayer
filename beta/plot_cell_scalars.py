@@ -172,7 +172,7 @@ class Vis():
             xml_pattern = self.output_dir + "/" + "output*.xml"
             xml_files = glob.glob(xml_pattern)
             xml_files.sort()
-            print("xml_files= ",xml_files)
+            # print("xml_files= ",xml_files)
             last_file = xml_files[-1]
             print("last file= ",last_file)
             print("last index= ",last_file[-12:-4])
