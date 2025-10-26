@@ -121,6 +121,18 @@ I finally realized that it was more straightforward to implement a "logical" OR"
 <img src="./images/cell_counts_6runs.png" width="35%" />
 Cell growth (cell counts) over time for 6 different sets of parameters.
 
+<hr>
+
+## Explore the parameter space
+```
+python params_run.py project params_run.txt
+...
+python params_run.py project params_run_26-30.txt
+```
+
+  <img src="./images/physicell_5x5.jpg" width="50%" />
+
+
 
 <hr>
 
