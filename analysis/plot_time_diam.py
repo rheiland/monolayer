@@ -42,6 +42,7 @@ out_dir = "./output_beta_14days_fixcycle_18hr"
 
 out_dir = "./output_monolayer_live_cycle_stochastic"
 out_dir = "./output_monolayer_cytomsep"
+out_dir = "./output_monolayer_not_fixed_cycle"
 out_dir = "./output_monolayer"
 
 #out_dir = "../PhysiCell/output_monolayer_pressure_set_behavior"
@@ -122,10 +123,13 @@ if add_points_flag:
   ax.plot(t2, tumor_diam2,'ko')
   ax.plot(drasdo_time, drasdo_diam,'ro')
 
+ax.set_xlim(0, 110)
+ax.set_ylim(0, 190)
+
 # ax.set(xlabel='t (day)', ylabel='diameter (micron)',title="monolayer growth")
 # ax.set(xlabel='T (unit)', ylabel='diameter (micron)',title="monolayer growth (PhysiCell)")
 # ax.set(xlabel='calibrated time units (T)', ylabel='diameter in calib space units (S)',title="monolayer growth (PhysiCell)")
-ax.set(xlabel='time (T)', ylabel='diameter (S)',title="monolayer growth (PhysiCell)")
+ax.set(xlabel='time (T)', ylabel='diameter (S)',title="monolayer growth (PhysiCell: not fixed cycle)")
 # ax.grid()
 # fig.savefig("test.png")
 plt.show()

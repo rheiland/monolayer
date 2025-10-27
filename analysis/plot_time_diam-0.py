@@ -42,13 +42,11 @@ out_dir = "./output_beta_14days_fixcycle_18hr"
 
 out_dir = "./output_monolayer_live_cycle_stochastic"
 out_dir = "./output_monolayer_cytomsep"
-out_dir = "./output_monolayer_not_fixed_cycle"
 out_dir = "./output_monolayer"
 
 #out_dir = "../PhysiCell/output_monolayer_pressure_set_behavior"
 t=[]
 tumor_diam=[]
-tumor_numcells=[]
 
 fig, ax = plt.subplots()
 
@@ -75,21 +73,18 @@ for idx in range(0,max_frame+1, hr_delta):
 
     current_time = mcds.get_time()
     # print('time (min)= ', current_time )
-    # print('time (hr)= ', current_time/60. )
+    print('time (hr)= ', current_time/60. )
     # print('time (day)= ', current_time/1440. )
-    num_cells = cells_x.shape[0]
     print("# cells= ",cells_x.shape[0])
-    # diam = cells_x.max() - cells_x.min()
-    # print("monolayer diam= ",diam)
+    diam = cells_x.max() - cells_x.min()
+    print("monolayer diam= ",diam)
 
-    # t.append(current_time/1440.)  # to get days
-    t.append(current_time/88.7)  # recall the 88.7 mins (the 90% width of 11 cells) = 1 T unit 
-    tumor_numcells.append(num_cells)      # calibrate space units by dividing by cell radius
+    t.append(current_time/1440.)
+    tumor_diam.append(diam)
     # sub_intern.append(sintern)
     # sub_conc.append(sconc)
 
-ax.plot(t, tumor_numcells,'k-')
-ax.plot(t, tumor_numcells,'k.')
+ax.plot(t, tumor_diam,'k-')
 
 t2 = []
 tumor_diam2 = []
@@ -123,16 +118,10 @@ if add_points_flag:
 
 if add_points_flag:
   ax.plot(t2, tumor_diam2,'ko')
-  ax.plot(drasdo_time, drasdo_diam,'ro')
 
-ax.set_xlim(0, 110)
-# ax.set_ylim(0, 190)
+ax.plot(drasdo_time, drasdo_diam,'ro')
 
-# ax.set(xlabel='t (day)', ylabel='diameter (micron)',title="monolayer growth")
-# ax.set(xlabel='T (unit)', ylabel='diameter (micron)',title="monolayer growth (PhysiCell)")
-# ax.set(xlabel='calibrated time units (T)', ylabel='diameter in calib space units (S)',title="monolayer growth (PhysiCell)")
-# ax.set(xlabel='time (T)', ylabel='# cells',title="monolayer growth (PhysiCell: stochastic cycle)")
-ax.set(xlabel='time (T)', ylabel='# cells',title="monolayer growth (PhysiCell: fixed cycle)")
+ax.set(xlabel='t (day)', ylabel='diameter (micron)',title="monolayer growth")
 # ax.grid()
 # fig.savefig("test.png")
 plt.show()
