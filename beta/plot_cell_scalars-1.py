@@ -1,6 +1,5 @@
 import sys
 import glob
-import argparse
 import string
 import os
 import time
@@ -28,50 +27,48 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 from pyMCDS import pyMCDS
 
-# argc = len(sys.argv)
-# if argc < 5:
-#     print("Usage:  args = output_dir colorbar_name frame show_colorbar [xmin xmax ymin ymax]")
-#     sys.exit()
-# print('argv=',sys.argv)
-# print('argc = len(argv)=',len(sys.argv))
+argc = len(sys.argv)
+if argc < 5:
+    print("Usage:  args = output_dir colorbar_name frame show_colorbar [xmin xmax ymin ymax]")
+    sys.exit()
+print('argv=',sys.argv)
+print('argc = len(argv)=',len(sys.argv))
 
-# idx = 0
-# print('argv[0]=',sys.argv[idx])
+idx = 0
+print('argv[0]=',sys.argv[idx])
 
-# idx += 1
-# output_dir = sys.argv[idx]
-# idx += 1
-# colorbar_name = sys.argv[idx]
-# print("colorbar_name= ",colorbar_name)
-# idx += 1
-# current_frame = int(sys.argv[idx])
-# print("current_frame= ",current_frame)
-# # p1=string.atof(sys.argv[1])
+idx += 1
+output_dir = sys.argv[idx]
+idx += 1
+colorbar_name = sys.argv[idx]
+print("colorbar_name= ",colorbar_name)
+idx += 1
+current_frame = int(sys.argv[idx])
+print("current_frame= ",current_frame)
+# p1=string.atof(sys.argv[1])
 
-# idx += 1
-# show_colorbar = int(sys.argv[idx])
+idx += 1
+show_colorbar = int(sys.argv[idx])
 
-# print("idx, argc= ",idx,argc)
-# if idx + 1 == argc:
-#     fixed_axes = False
-# else:
-#     fixed_axes = True
-#     idx += 1
-#     plot_xmin = float(sys.argv[idx])
-#     idx += 1
-#     plot_xmax = float(sys.argv[idx])
-#     idx += 1
-#     plot_ymin = float(sys.argv[idx])
-#     idx += 1
-#     plot_ymax = float(sys.argv[idx])
+print("idx, argc= ",idx,argc)
+if idx + 1 == argc:
+    fixed_axes = False
+else:
+    fixed_axes = True
+    idx += 1
+    plot_xmin = float(sys.argv[idx])
+    idx += 1
+    plot_xmax = float(sys.argv[idx])
+    idx += 1
+    plot_ymin = float(sys.argv[idx])
+    idx += 1
+    plot_ymax = float(sys.argv[idx])
 
 
 class Vis():
-    def __init__(self, output_dir, current_frame,axes_fixed,colorbar_name,show_colorbar,scalar_name,plot_xmin,plot_xmax,plot_ymin,plot_ymax):
+    def __init__(self):
         super().__init__()
         # global self.config_params
-
-        print("\n--- Vis()  plot_xmax=", plot_xmax)
 
         self.xml_root = None
         self.current_frame = current_frame
@@ -126,18 +123,16 @@ class Vis():
         self.output_dir = "./output"
         self.output_dir = output_dir
 
-        self.fixed_axes = axes_fixed
+        self.fixed_axes = fixed_axes
         if self.fixed_axes:
             self.plot_xmin = plot_xmin
             self.plot_xmax = plot_xmax
             self.plot_ymin = plot_ymin
             self.plot_ymax = plot_ymax
-            print("\n--- setting  plot_xmax=", self.plot_xmax)
 
         self.cbar_name = colorbar_name
 
         self.show_colorbar = show_colorbar
-        self.scalar_name = scalar_name
 
         self.customized_output_freq = False
 
@@ -172,7 +167,7 @@ class Vis():
             xml_pattern = self.output_dir + "/" + "output*.xml"
             xml_files = glob.glob(xml_pattern)
             xml_files.sort()
-            # print("xml_files= ",xml_files)
+            print("xml_files= ",xml_files)
             last_file = xml_files[-1]
             print("last file= ",last_file)
             print("last index= ",last_file[-12:-4])
@@ -184,7 +179,7 @@ class Vis():
         plt.savefig(png_filename)
         png_filename = Path(self.output_dir,'keep.png')
         plt.savefig(png_filename)
-        plt.show()
+        # plt.show()
 
 
     def get_mcds_cells_df(self, mcds):
@@ -228,7 +223,7 @@ class Vis():
         self.numy =  math.ceil( (self.ymax - self.ymin) / 20.)
         # print(" calc: numx,numy = ",self.numx, self.numy)
 
-        # self.current_frame = current_frame
+        self.current_frame = current_frame
         print('frame # ',self.current_frame)
         self.plot_cell_scalar(self.current_frame)
         # self.plot_substrate(self.current_frame)
@@ -349,7 +344,6 @@ class Vis():
 
     #------------------------------------------------------------
     def plot_cell_scalar(self, frame):
-        print("~~~ plot_cell_scalar()")
         self.disable_cell_scalar_cb = False
         if self.disable_cell_scalar_cb:
             return
@@ -363,8 +357,7 @@ class Vis():
         xml_file_root = "output%08d.xml" % frame
         xml_file = os.path.join(self.output_dir, xml_file_root)
         # cell_scalar_humanreadable_name = self.cell_scalar_combobox.currentText()
-        # cell_scalar_humanreadable_name = "a_i"
-        cell_scalar_humanreadable_name = self.scalar_name
+        cell_scalar_humanreadable_name = "a_i"
         if cell_scalar_humanreadable_name in self.cell_scalar_human2mcds_dict.keys():
             cell_scalar_mcds_name = self.cell_scalar_human2mcds_dict[cell_scalar_humanreadable_name]
         else:
@@ -411,44 +404,10 @@ class Vis():
 
         xvals = df_cells['position_x']
         yvals = df_cells['position_y']
-        xy_array = np.column_stack((xvals, yvals))
-
-        np.savetxt(self.output_dir + "/cells.csv", xy_array, delimiter=',')
-
 
         # self.title_str += "   cells: " + svals[2] + "d, " + svals[4] + "h, " + svals[7][:-3] + "m"
         # self.title_str = "(" + str(frame) + ") Current time: " + str(total_min) + "m"
         
-        #-----------------------------------------------------
-        # rwh - unique to OpenVT monolayer model
-        if cell_scalar_mcds_name == "beta_or_gamma": 
-            print("------- doing discrete beta_or_gamma")
-            self.discrete_variable = [0,1,2,3]
-
-            # names_observed = ["phase #%d" % i for i in sorted(list(self.discrete_variable_observed)) if i in [0,1,2,3]]
-            from_list = matplotlib.colors.LinearSegmentedColormap.from_list
-            self.discrete_variable.sort()
-            if (len(self.discrete_variable) == 1): 
-                cbar_name = from_list(None, cmaps.gray_gray[0:2], len(self.discrete_variable))  # annoying hack
-            else: 
-                try:
-                    # cbar_name = from_list(None, cmaps.paint_clist[0:len(self.discrete_variable)], len(self.discrete_variable))
-                    # Lutz: light-green, light-blue, yellow, red
-                    cbar_name = from_list(None, [[0.5, 1, 0.5],[0,0.5,1],[1,1,0],[1,0,0]], len(self.discrete_variable))
-                    # print("cmaps.paint_clist=",cmaps.paint_clist)
-                    # print("cbar_name=",cbar_name) # <matplotlib.colors.LinearSegmentedColormap
-                except:
-                    return
-
-            # usual categorical colormap on matplotlib has at max 20 colors (using colorcet the colormap glasbey_bw has n colors )
-            # cbar_name = from_list(None, cc.glasbey_bw, len(self.discrete_variable))
-            vmin = None
-            vmax = None
-            # Change the values between 0 and number of possible values
-            for i, value in enumerate(self.discrete_variable):
-                cell_scalar = cell_scalar.replace(value,i)
-
-        #-----------------------------------------------------
         if cell_scalar_mcds_name in self.discrete_cell_scalars: 
 
             self.discrete_variable_observed = self.discrete_variable_observed.union(set([int(i) for i in np.unique(cell_scalar)]))
@@ -478,8 +437,6 @@ class Vis():
             elif cell_scalar_mcds_name == "dead":
                 self.discrete_variable = [0,1]
                 names_observed = ["dead" if i == 1 else "alive" for i in sorted(list(self.discrete_variable_observed)) if i in [0,1]]
-
-
             else:
                 self.discrete_variable = [int(i) for i in list(set(cell_scalar))] # It's a set of possible value of the variable
                 names_observed = [str(int(i)) for i in sorted(list(self.discrete_variable_observed))] 
@@ -548,10 +505,7 @@ class Vis():
         # if self.axis_id_cellscalar:
     
         if self.show_colorbar:
-
-            # rwh:
             if( self.discrete_variable ): # Generic way: if variable is discrete
-            # if( self.discrete_variable or cell_scalar_mcds_name == "beta_or_gamma"): # Generic way: if variable is discrete
                 # Then we don't need the cax2
                 if self.cax2 is not None:
                     try:
@@ -581,21 +535,17 @@ class Vis():
                     self.cbar2 = self.figure.colorbar(cell_plot, ticks=None, cax=self.cax2, orientation="horizontal")
                     self.cbar2.ax.tick_params(labelsize=self.fontsize)
                 elif self.cell_scalar_updated:
-                    print("cbar #2")
                     self.cbar2 = self.figure.colorbar(cell_plot, ticks=None, cax=self.cax2, orientation="horizontal")
                     self.cell_scalar_updated = False
                 else:
                     self.cbar2.update_normal(cell_plot)  # partial fix for memory leak
 
-                # self.cbar_label_fontsize = 0  #rwh
-                if cell_scalar_mcds_name != "beta_or_gamma": 
-                    self.cbar2.ax.set_xlabel(cell_scalar_humanreadable_name, fontsize=self.cbar_label_fontsize)
+                self.cbar2.ax.set_xlabel(cell_scalar_humanreadable_name, fontsize=self.cbar_label_fontsize)
    
         self.ax0.set_title(self.title_str, fontsize=self.title_fontsize)
 
         # rwh
         if self.fixed_axes:
-            print("plotting fixed_axes:  xmax=", self.plot_xmax)
             self.ax0.set_xlim(self.plot_xmin, self.plot_xmax)
             self.ax0.set_ylim(self.plot_ymin, self.plot_ymax)
 
@@ -714,77 +664,8 @@ class Vis():
             self.plot_cell_scalar(self.svg_frame)
 
 def main():
-    output_dir = "output"
-    current_frame = 1
-    axes_fixed = False
-    colorbar_name = "RdBu"
-    show_colorbar = False
-    scalar_name = "a_i"
-    beta_gamma = False
-    plot_xmin = 0.0
-    plot_xmax = 100.0
-    plot_ymin = 0.0
-    plot_ymax = 100.0
-    try:
-        parser = argparse.ArgumentParser(description='Monolayer plot ')
-
-    #   print("Usage:  args = output_dir colorbar_name frame show_colorbar [xmin xmax ymin ymax]")
-
-        parser.add_argument("-o ", "--output_dir", type=str, help="output directory")
-        parser.add_argument("-f ", "--frame", type=int, help="current frame to plot")
-        # parser.add_argument("-a ", "--axes_fixed", type=bool, help="fixed axes")
-        parser.add_argument("-a ", "--axes_fixed", dest="axes_fixed", help="fixed axes", action="store_true")
-        parser.add_argument("-c ", "--colorbar_name", type=str, help="mpl colorbar name")
-        parser.add_argument("-b ", "--show_colorbar", dest="show_colorbar", help="show colorbar", action="store_true")
-        parser.add_argument("-s ", "--scalar_name", type=str, help="scalar value [a_i]")
-        parser.add_argument("-x0 ", "--xmin", type=float, help="plot xmin")
-        parser.add_argument("-x1 ", "--xmax", type=float, help="plot xmin")
-        parser.add_argument("-y0 ", "--ymin", type=float, help="plot ymin")
-        parser.add_argument("-y1 ", "--ymax", type=float, help="plot ymax")
-
-        # args = parser.parse_args()
-        args, unknown = parser.parse_known_args()
-        print("args=",args)
-        print("unknown=",unknown)
-        if unknown:
-            print("len(unknown)= ",len(unknown))
-            print("Invalid argument(s): ",unknown)
-            print("Use '--help' to see options.")
-            sys.exit(-1)
-        if args.output_dir:
-            output_dir = args.output_dir
-        if args.frame:
-            current_frame = args.frame
-        if args.axes_fixed:
-            # axes_fixed = args.axes_fixed
-            axes_fixed= True
-        if args.colorbar_name:
-            colorbar_name = args.colorbar_name
-        if args.show_colorbar:
-            show_colorbar= True
-        if args.scalar_name:
-            scalar_name= args.scalar_name
-        if args.xmin:
-            plot_xmin = args.xmin
-            print("args.xmin= ",plot_xmin)
-        if args.xmax:
-            plot_xmax = args.xmax
-            print("args.xmax= ",plot_xmax)
-        if args.ymin:
-            plot_ymin = args.ymin
-            print("args.ymin= ",plot_ymin)
-        if args.ymax:
-            plot_ymax = args.ymax
-            print("args.ymax= ",plot_ymax)
-
-    except:
-        print("Error parsing command line args.")
-        sys.exit(-1)
-
-    print(f'output_dir={output_dir}, current_frame={current_frame}, axes_fixed={axes_fixed}, colorbar={colorbar_name}, show_colorbar={show_colorbar}, xmax={plot_xmax} ')
-    
-    # show_colorbar = True
-    vis_tab = Vis(output_dir,current_frame,axes_fixed,colorbar_name,show_colorbar,scalar_name, plot_xmin,plot_xmax,plot_ymin,plot_ymax )
+    inputfile = ''
+    vis_tab = Vis()
 	
 if __name__ == '__main__':
     main()

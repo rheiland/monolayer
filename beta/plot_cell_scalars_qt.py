@@ -21,8 +21,7 @@ from xml.dom import minidom
 from PyQt5 import QtCore, QtGui
 from PyQt5.QtWidgets import *
 
-# from vis_tab_cells_only import Vis 
-from vis_tab_svg import Vis 
+from vis_tab_cell_scalars import Vis 
 
 def SingleBrowse(self):
         # if len(self.csv) < 2:
