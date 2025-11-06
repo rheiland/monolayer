@@ -185,6 +185,7 @@ class Vis():
         # plt.savefig(png_filename)
         png_filename = Path(self.output_dir,'keep.png')
         plt.savefig(png_filename,bbox_inches='tight')
+        plt.axis('off')
         plt.show()
 
 
