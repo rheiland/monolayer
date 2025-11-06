@@ -181,10 +181,10 @@ class Vis():
 
         self.plot_cell_scalar(self.current_frame)
         png_filename = Path(self.output_dir,f'frame{self.current_frame}')
-        # plt.tight_layout()
-        # plt.savefig(png_filename)
+        plt.tight_layout()
+        plt.savefig(png_filename)
         png_filename = Path(self.output_dir,'keep.png')
-        plt.savefig(png_filename,bbox_inches='tight')
+        plt.savefig(png_filename)
         plt.show()
 
 
@@ -243,17 +243,17 @@ class Vis():
             print("              self.figure is None, so return!")
             return
         self.figure = plt.figure()
-        self.figure.tight_layout()  # rwh: doesn't help
-        # self.gs = gridspec.GridSpec(2,2, height_ratios=[20,1], width_ratios=[20,1]) # top row is [plot, substrate colorbar]; bottom row is [cells colorbar, nothing]
+        # self.figure.tight_layout()  # rwh: doesn't help
+        self.gs = gridspec.GridSpec(2,2, height_ratios=[20,1], width_ratios=[20,1]) # top row is [plot, substrate colorbar]; bottom row is [cells colorbar, nothing]
         # self.canvas = FigureCanvasQTAgg(self.figure)
         # print("     self.canvas= ",self.canvas)
         # self.canvas.setStyleSheet("background-color:transparent;")
 
         # Adding one subplot for image
-        self.ax0 = self.figure.add_subplot(111)
+        # self.ax0 = self.figure.add_subplot(111)
         # self.ax0 = self.figure.add_subplot(111, adjustable='box', aspect=1.2)
         # self.ax0 = self.figure.add_subplot(111, adjustable='box', aspect=self.aspect_ratio)
-        # self.ax0 = self.figure.add_subplot(self.gs[0,0], adjustable='box')
+        self.ax0 = self.figure.add_subplot(self.gs[0,0], adjustable='box')
         
         # self.ax0.get_xaxis().set_visible(False)
         # self.ax0.get_yaxis().set_visible(False)
@@ -593,7 +593,7 @@ class Vis():
                 if cell_scalar_mcds_name != "beta_or_gamma": 
                     self.cbar2.ax.set_xlabel(cell_scalar_humanreadable_name, fontsize=self.cbar_label_fontsize)
    
-        # self.ax0.set_title(self.title_str, fontsize=self.title_fontsize)
+        self.ax0.set_title(self.title_str, fontsize=self.title_fontsize)
 
         # rwh
         if self.fixed_axes:
@@ -605,9 +605,6 @@ class Vis():
             self.ax0.set_aspect('equal')
         else:
             self.ax0.set_aspect('auto')
-
-        self.ax0.set_xticks([])
-        self.ax0.set_yticks([])
 
     #---------------------------------------------------------------------------
     # assume "frame" is cell frame #, unless Cells is togggled off, then it's the substrate frame #
