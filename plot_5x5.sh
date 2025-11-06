@@ -1,0 +1,15 @@
+python beta/plot_cell_scalars.py -o run01_nbrs -s beta_or_gamma -f -1 -a -x0 -600 -x1 600 -y0 -600 -y1 600
+python beta/plot_cell_scalars.py -o run02_nbrs -s beta_or_gamma -f -1 -a -x0 -600 -x1 600 -y0 -600 -y1 600
+python beta/plot_cell_scalars.py -o run03_nbrs -s beta_or_gamma -f -1 -a -x0 -600 -x1 600 -y0 -600 -y1 600
+python beta/plot_cell_scalars.py -o run04_nbrs -s beta_or_gamma -f -1 -a -x0 -600 -x1 600 -y0 -600 -y1 600
+python beta/plot_cell_scalars.py -o run05_nbrs -s beta_or_gamma -f -1 -a -x0 -600 -x1 600 -y0 -600 -y1 600
+python beta/plot_cell_scalars.py -o run06_nbrs -s beta_or_gamma -f -1 -a -x0 -600 -x1 600 -y0 -600 -y1 600
+python beta/plot_cell_scalars.py -o run07_nbrs -s beta_or_gamma -f -1 -a -x0 -600 -x1 600 -y0 -600 -y1 600
+python beta/plot_cell_scalars.py -o run08_nbrs -s beta_or_gamma -f -1 -a -x0 -600 -x1 600 -y0 -600 -y1 600
+python beta/plot_cell_scalars.py -o run09_nbrs -s beta_or_gamma -f -1 -a -x0 -600 -x1 600 -y0 -600 -y1 600
+python beta/plot_cell_scalars.py -o run10_nbrs -s beta_or_gamma -f -1 -a -x0 -600 -x1 600 -y0 -600 -y1 600
+python beta/plot_cell_scalars.py -o run11_nbrs -s beta_or_gamma -f -1 -a -x0 -600 -x1 600 -y0 -600 -y1 600
+python beta/plot_cell_scalars.py -o run12_nbrs -s beta_or_gamma -f -1 -a -x0 -600 -x1 600 -y0 -600 -y1 600
+python beta/plot_cell_scalars.py -o run13_nbrs -s beta_or_gamma -f -1 -a -x0 -600 -x1 600 -y0 -600 -y1 600
+python beta/plot_cell_scalars.py -o run14_nbrs -s beta_or_gamma -f -1 -a -x0 -600 -x1 600 -y0 -600 -y1 600
+python beta/plot_cell_scalars.py -o run15_nbrs -s beta_or_gamma -f -1 -a -x0 -600 -x1 600 -y0 -600 -y1 600
