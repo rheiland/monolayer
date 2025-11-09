@@ -184,9 +184,17 @@ class Vis():
         # plt.tight_layout()
         # plt.savefig(png_filename)
         png_filename = Path(self.output_dir,'keep.png')
-        plt.savefig(png_filename,bbox_inches='tight')
+        # plt.savefig(png_filename,bbox_inches='tight')  
+        # plt.savefig(png_filename,bbox_inches='tight', facecolor='black', transparent=True)  # optional black
+        plt.savefig(png_filename,bbox_inches='tight', facecolor='white', transparent=True)  
         plt.axis('off')
-        plt.show()
+
+        # these don't do it; see below for fig
+        # plt.style.use('dark_background')  # Nope
+        # plt.rcParams['figure.facecolor'] = 'black'
+        # plt.rcParams['axes.facecolor'] = 'black'
+
+        plt.show()  # comment out if doing beta/montage_monolayer.py
 
 
     def get_mcds_cells_df(self, mcds):
@@ -244,7 +252,8 @@ class Vis():
             print("              self.figure is None, so return!")
             return
         self.figure = plt.figure()
-        self.figure.tight_layout()  # rwh: doesn't help
+        self.figure.tight_layout()  # rwh: doesn't help?
+        # self.figure.set_facecolor('black')  # optional black background
         # self.gs = gridspec.GridSpec(2,2, height_ratios=[20,1], width_ratios=[20,1]) # top row is [plot, substrate colorbar]; bottom row is [cells colorbar, nothing]
         # self.canvas = FigureCanvasQTAgg(self.figure)
         # print("     self.canvas= ",self.canvas)
@@ -382,6 +391,7 @@ class Vis():
         mcds = pyMCDS(xml_file_root, self.output_dir, microenv=False, graph=False, verbose=False)
         df_cells = self.get_mcds_cells_df(mcds)
         total_min = mcds.get_time()  # warning: can return float that's epsilon from integer value
+        print("---  total_min = ",total_min)
 
         try:
             cell_scalar = df_cells[cell_scalar_mcds_name]
@@ -437,7 +447,28 @@ class Vis():
                 try:
                     # cbar_name = from_list(None, cmaps.paint_clist[0:len(self.discrete_variable)], len(self.discrete_variable))
                     # Lutz: light-green, light-blue, yellow, red
-                    cbar_name = from_list(None, [[0.5, 1, 0.5],[0,0.5,1],[1,1,0],[1,0,0]], len(self.discrete_variable))
+                    # cbar_name = from_list(None, [[0.5, 1, 0.5],[0,0.5,1],[1,1,0],[1,0,0]], len(self.discrete_variable))
+                    # Roman: 4-state colors (but my use of Digi Color Meter)
+                    # 0= growing (dark blue)
+                    # 1= beta inhibited (yellow)
+                    # 2= gamma inhibited (light blue)
+                    # 3= both beta & gamma inhibited (dark red)
+                    # cbar_name = from_list(None, [[0.263,0.478,0.694], [0.945,0.698,0.431], [0.706,0.847,0.906],
+                    #                              [0.773,0.196,0.165]], len(self.discrete_variable))
+                    
+                    # But Roman's cartography app used:
+                    # Red: 215,25,28
+                    # yellow: 253,174,97
+                    # light blue: 171,217,233
+                    # blue: 44,123,182
+                    cbar_name = from_list(None, [[44/255.,123/255.,182/255.], [253/255.,174/255.,97/255.], 
+                        [171/255.,217/255.,233/255.],[215/255.,25/255.,28/255.]], len(self.discrete_variable))
+                                                 
+
+
+                    # swap red and dark blue?
+                    # cbar_name = from_list(None, [[0.773,0.196,0.165], [0.945,0.698,0.431], [0.706,0.847,0.906],
+                    #                              [0.263,0.478,0.694]], len(self.discrete_variable))
                     # print("cmaps.paint_clist=",cmaps.paint_clist)
                     # print("cbar_name=",cbar_name) # <matplotlib.colors.LinearSegmentedColormap
                 except:
@@ -519,6 +550,7 @@ class Vis():
         self.title_str = '%d days, %d hrs, %d mins' % (days, hrs-days*24, mins-hrs*60)
         # self.title_str = '%f mins' % (total_min)  # rwh: custom
         self.title_str += " (" + str(num_cells) + " agents)"
+        print(self.title_str)
 
         axes_min = mcds.get_mesh()[0][0][0][0]
         axes_max = mcds.get_mesh()[0][0][-1][0]
