@@ -457,16 +457,18 @@ class Vis():
                     #                              [0.773,0.196,0.165]], len(self.discrete_variable))
                     
                     # But Roman's cartography app used:
-                    # Red: 215,25,28
+                    # blue: 44,123,182
                     # yellow: 253,174,97
                     # light blue: 171,217,233
-                    # blue: 44,123,182
+                    # Red: 215,25,28
                     cbar_name = from_list(None, [[44/255.,123/255.,182/255.], [253/255.,174/255.,97/255.], 
                         [171/255.,217/255.,233/255.],[215/255.,25/255.,28/255.]], len(self.discrete_variable))
                                                  
 
 
                     # swap red and dark blue?
+                    # cbar_name = from_list(None, [[215/255.,25/255.,28/255.], [253/255.,174/255.,97/255.], 
+                    #     [171/255.,217/255.,233/255.], [44/255.,123/255.,182/255.]], len(self.discrete_variable))
                     # cbar_name = from_list(None, [[0.773,0.196,0.165], [0.945,0.698,0.431], [0.706,0.847,0.906],
                     #                              [0.263,0.478,0.694]], len(self.discrete_variable))
                     # print("cmaps.paint_clist=",cmaps.paint_clist)
