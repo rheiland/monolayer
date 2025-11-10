@@ -550,6 +550,8 @@ class Vis():
         days = int(hrs/24)
         # print(f"mins={mins}, hrs={hrs}, days={days}")
         self.title_str = '%d days, %d hrs, %d mins' % (days, hrs-days*24, mins-hrs*60)
+        self.title_str = self.output_dir + ': %d days, %d hrs, %d mins' % (days, hrs-days*24, mins-hrs*60)
+        self.title_str = self.output_dir 
         # self.title_str = '%f mins' % (total_min)  # rwh: custom
         self.title_str += " (" + str(num_cells) + " agents)"
         print(self.title_str)
@@ -628,7 +630,7 @@ class Vis():
                 if cell_scalar_mcds_name != "beta_or_gamma": 
                     self.cbar2.ax.set_xlabel(cell_scalar_humanreadable_name, fontsize=self.cbar_label_fontsize)
    
-        # self.ax0.set_title(self.title_str, fontsize=self.title_fontsize)
+        self.ax0.set_title(self.title_str, fontsize=self.title_fontsize)
 
         # rwh
         if self.fixed_axes:
