@@ -194,7 +194,7 @@ class Vis():
         # plt.rcParams['figure.facecolor'] = 'black'
         # plt.rcParams['axes.facecolor'] = 'black'
 
-        plt.show()  # comment out if doing beta/montage_monolayer.py
+        # plt.show()  # comment out if doing beta/montage_monolayer.py
 
 
     def get_mcds_cells_df(self, mcds):
@@ -268,6 +268,7 @@ class Vis():
         # self.ax0.get_xaxis().set_visible(False)
         # self.ax0.get_yaxis().set_visible(False)
         # plt.tight_layout()
+        self.ax0.set_frame_on(False)  # rwh: no box/boundary/axes borders
 
         # self.reset_model()  # rwh
 
@@ -630,7 +631,7 @@ class Vis():
                 if cell_scalar_mcds_name != "beta_or_gamma": 
                     self.cbar2.ax.set_xlabel(cell_scalar_humanreadable_name, fontsize=self.cbar_label_fontsize)
    
-        self.ax0.set_title(self.title_str, fontsize=self.title_fontsize)
+        # self.ax0.set_title(self.title_str, fontsize=self.title_fontsize) # rwh: optional
 
         # rwh
         if self.fixed_axes:

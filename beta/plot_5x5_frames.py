@@ -13,6 +13,7 @@ montage_cmd = "montage -geometry +0+0 -tile 5x5 "
 gamma_vals = [0.5, 0.6, 0.7, 0.8, 0.9]
 gamma_vals = [0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95]
 gamma_vals = [0.3, 0.5, 0.7, 0.8, 0.9]
+# gamma_vals = [0.3]
 print("type(gamma_vals)=", type(gamma_vals))
 print(gamma_vals)
 gamma_r = list(reversed(gamma_vals))
@@ -21,9 +22,10 @@ print(gamma_r)
 for gamma in gamma_r:
     # for beta in [0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95]:
     for beta in [0.6, 0.7, 0.8, 0.9, 0.95]:
+    # for beta in [0.6]:
         output_dir = "out_b" + str(beta) + "_g" + str(gamma)
         cmd = "python beta/plot_cell_scalars.py -o " + output_dir + " -s beta_or_gamma -f -1 -a -x0 -600 -x1 600 -y0 -600 -y1 600"
-        # os.system(cmd)
+        os.system(cmd)
 
         montage_cmd += output_dir + "/keep.png "
 
