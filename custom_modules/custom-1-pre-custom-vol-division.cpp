@@ -135,7 +135,7 @@ void create_cell_types( void )
 	// cell_defaults.functions.contact_function = contact_function; 
     cell_defaults.functions.cell_division_function = custom_division_function; 
     // cell_defaults.functions.volume_update_function = double_volume_update_function; 
-    cell_defaults.functions.volume_update_function = custom_volume_function; 
+    // cell_defaults.functions.volume_update_function = custom_volume_function; 
 	
 	/*
 	   This builds the map of cell definitions and summarizes the setup. 
@@ -397,8 +397,7 @@ void contact_function( Cell* pMe, Phenotype& phenoMe , Cell* pOther, Phenotype& 
 //     pCell->set_total_volume( pCell->phenotype.volume.total + pCell->phenotype.volume.total * pCell->custom_data["growth_rate"]);
 
 //     // if (pCell->phenotype.volume.total > 1047)    //rwh: hard-coded; fix!
-    // double NormalRandom( double mean, double standard_deviation )
-    // if (pCell->phenotype.volume.total > NormalRandom(2.0, 0.4) * 523.6)    //rwh: hard-coded; fix!
+//     if (pCell->phenotype.volume.total > NormalRandom(2.0, 0.25) * 523.6)    //rwh: hard-coded; fix!
 //     // if (pCell->phenotype.volume.total > NormalRandom(2.0, 1.0) * 523.6)    //rwh: hard-coded; fix!
 //     {
 //         // std::cout << "------- " << __FUNCTION__ << ":  ID= " << pCell->ID <<":  volume.total= " << pCell->phenotype.volume.total << std::endl;
@@ -407,43 +406,16 @@ void contact_function( Cell* pMe, Phenotype& phenoMe , Cell* pOther, Phenotype& 
 // }
 
 // do every phenotype dt
-void custom_volume_function( Cell* pCell, Phenotype& phenotype, double dt )
-{ 
-    std::cout << " -------- "<<__FUNCTION__ << ":  t= " << PhysiCell_globals.current_time << ": cell ID= " << pCell->ID << std::endl;
+// void custom_volume_function( Cell* pCell, Phenotype& phenotype, double dt )
+// { 
+//     std::cout << __FUNCTION__ << ": " << PhysiCell_globals.current_time << ": cell ID= " << pCell->ID << std::endl;
+// }
 
-    pCell->set_total_volume( pCell->phenotype.volume.total + pCell->phenotype.volume.total * pCell->custom_data["growth_rate"]);
-
-    // if (pCell->phenotype.volume.total > NormalRandom(2.0, 0.4) * 523.6)    //rwh: hard-coded; fix!
-    double vol_norm_rand = pCell->custom_data["norm_rand"] * 523.6;
-    if (pCell->phenotype.volume.total >= vol_norm_rand)  // hard-code
-    {
-        // std::cout << "-- flag for division because vol(total)= " <<  pCell->phenotype.volume.total<< " and vol_norm_rand= " <<  vol_norm_rand << std::endl;
-        // pCell->flag_for_division();
-        #pragma omp critical
-        {
-            std::cout << "-- pCell->divide() because vol(total)= " <<  pCell->phenotype.volume.total<< " and vol_norm_rand= " <<  vol_norm_rand << std::endl;
-            pCell->divide();
-        }
-    }
-}
-
-// Assign N(2,0.4^2) to each daughter cell. Exit the sim at 10K cells.
+// the only reason for this fn is to exit the sim at 10K cells
 void custom_division_function( Cell* pCell1, Cell* pCell2 )
 { 
     // static int monolayer_max_cells = 9999;
     static int monolayer_max_cells = 10000;
-    static double draw_mean = 2.0;
-    static double draw_stddev = 0.4;
-
-    std::cout << " ---- "<<__FUNCTION__ << ":  t= " << PhysiCell_globals.current_time << std::endl;
-
-    // live.phases[0].division_at_phase_exit = true; 
-    std::cout << "       pCell1...division_at_phase_exit  = " << pCell1->phenotype.cycle.pCycle_Model->phases[0].division_at_phase_exit  << std::endl;
-    std::cout << "       pCell2...division_at_phase_exit  = " << pCell2->phenotype.cycle.pCycle_Model->phases[0].division_at_phase_exit  << std::endl;
-
-    pCell1->phenotype.cycle.pCycle_Model->phases[0].division_at_phase_exit = false;
-    pCell2->phenotype.cycle.pCycle_Model->phases[0].division_at_phase_exit = false;
-
     if (parameters.ints.find_index("max_cells") != -1)
 	{
         monolayer_max_cells = parameters.ints("max_cells");
@@ -486,23 +458,6 @@ void custom_division_function( Cell* pCell1, Cell* pCell2 )
         std::cout << std::endl; 
         exit(-1);
     }
-
-    // set each daughter cell's "X" value to determine cell division: A(t) = X * A_0(0)
-    double draw = NormalRandom(draw_mean, draw_stddev);  //     // where: NormalRandom(mean, std_dev)
-    while (draw < 0.0)
-    {
-        draw = NormalRandom(draw_mean, draw_stddev); 
-    }
-    // pCell1->custom_data["growth_rate"]
-    pCell1->custom_data["norm_rand"] = draw;
-
-
-    draw = NormalRandom(draw_mean, draw_stddev);  //     // where: NormalRandom(mean, std_dev)
-    while (draw < 0.0)
-    {
-        draw = NormalRandom(draw_mean, draw_stddev); 
-    }
-    pCell2->custom_data["norm_rand"] = draw;
 
     return; 
 }

@@ -90,3 +90,4 @@ void custom_function( Cell* pCell, Phenotype& phenotype , double dt );
 
 void contact_function( Cell* pMe, Phenotype& phenoMe , Cell* pOther, Phenotype& phenoOther , double dt ); 
 void custom_division_function( Cell* pCell1, Cell* pCell2 );
+void custom_volume_function( Cell* pCell, Phenotype& phenotype, double dt );
