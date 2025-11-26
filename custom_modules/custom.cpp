@@ -67,7 +67,7 @@
 
 #include "./custom.h"
 
-int param_matrix_elm; // 0,1,2 (top row); 3,4,5 (middle); 6,7,8 (bottom)
+// int param_matrix_elm; // 0,1,2 (top row); 3,4,5 (middle); 6,7,8 (bottom)
 double beta_threshold, gamma_threshold;
 
 void create_cell_types( void )
@@ -81,7 +81,7 @@ void create_cell_types( void )
 	   
 	   This is a good place to set default functions. 
 	*/ 
-	param_matrix_elm = parameters.ints("param_matrix_elm");  
+	// param_matrix_elm = parameters.ints("param_matrix_elm");  
 	beta_threshold = parameters.doubles("beta_threshold");  
 	gamma_threshold = parameters.doubles("gamma_threshold");  
 	
@@ -335,7 +335,9 @@ void custom_function( Cell* pCell, Phenotype& phenotype, double dt )
     // }
 	// else if (param_matrix_elm == 0)
     {
-        set_single_behavior( pCell , "cycle entry" , 0.01124);  // 1/89
+        // set_single_behavior( pCell , "cycle entry" , 0.01124);  // 1/89
+        // set_single_behavior( pCell , "growth_rate" , 5.883);  // 1/89
+        pCell->custom_data["growth_rate"] = 5.883;
         pCell->custom_data["beta_or_gamma"] = 0;
         // if ((beta < 0.9) || (gamma < 0.9))
         // if ((beta < 0.5) || (gamma < 0.9))
@@ -345,12 +347,16 @@ void custom_function( Cell* pCell, Phenotype& phenotype, double dt )
         // }
         if (beta < beta_threshold)
         {
-            set_single_behavior( pCell , "cycle entry" , 0.0);  // arrest the cell cycle, by default
+            // set_single_behavior( pCell , "cycle entry" , 0.0);  // arrest the cell cycle, by default
+            // set_single_behavior( pCell , "growth_rate" , 0.0);
+            pCell->custom_data["growth_rate"] = 0.0;
             pCell->custom_data["beta_or_gamma"] += 1;
         }
         if (gamma < gamma_threshold)
         {
-            set_single_behavior( pCell , "cycle entry" , 0.0);  // arrest the cell cycle, by default
+            // set_single_behavior( pCell , "cycle entry" , 0.0);  // arrest the cell cycle, by default
+            // set_single_behavior( pCell , "growth_rate" , 0.0);
+            pCell->custom_data["growth_rate"] = 0.0;
             pCell->custom_data["beta_or_gamma"] += 2;
         }
         return;
@@ -409,9 +415,10 @@ void contact_function( Cell* pMe, Phenotype& phenoMe , Cell* pOther, Phenotype& 
 // do every phenotype dt
 void custom_volume_function( Cell* pCell, Phenotype& phenotype, double dt )
 { 
-    std::cout << " -------- "<<__FUNCTION__ << ":  t= " << PhysiCell_globals.current_time << ": cell ID= " << pCell->ID << std::endl;
+    // std::cout << " -------- "<<__FUNCTION__ << ":  t= " << PhysiCell_globals.current_time << ": cell ID= " << pCell->ID << std::endl;
 
-    pCell->set_total_volume( pCell->phenotype.volume.total + pCell->phenotype.volume.total * pCell->custom_data["growth_rate"]);
+    // pCell->set_total_volume( pCell->phenotype.volume.total + pCell->phenotype.volume.total * pCell->custom_data["growth_rate"]);
+    pCell->set_total_volume( pCell->phenotype.volume.total + phenotype_dt * pCell->custom_data["growth_rate"]);
 
     // if (pCell->phenotype.volume.total > NormalRandom(2.0, 0.4) * 523.6)    //rwh: hard-coded; fix!
     double vol_norm_rand = pCell->custom_data["norm_rand"] * 523.6;
@@ -421,7 +428,7 @@ void custom_volume_function( Cell* pCell, Phenotype& phenotype, double dt )
         // pCell->flag_for_division();
         #pragma omp critical
         {
-            std::cout << "-- pCell->divide() because vol(total)= " <<  pCell->phenotype.volume.total<< " and vol_norm_rand= " <<  vol_norm_rand << std::endl;
+            // std::cout << "-- pCell->divide() because vol(total)= " <<  pCell->phenotype.volume.total<< " and vol_norm_rand= " <<  vol_norm_rand << std::endl;
             pCell->divide();
         }
     }
@@ -435,12 +442,13 @@ void custom_division_function( Cell* pCell1, Cell* pCell2 )
     static double draw_mean = 2.0;
     static double draw_stddev = 0.4;
 
-    std::cout << " ---- "<<__FUNCTION__ << ":  t= " << PhysiCell_globals.current_time << std::endl;
+    // std::cout << " ---- "<<__FUNCTION__ << ":  t= " << PhysiCell_globals.current_time << std::endl;
 
     // live.phases[0].division_at_phase_exit = true; 
-    std::cout << "       pCell1...division_at_phase_exit  = " << pCell1->phenotype.cycle.pCycle_Model->phases[0].division_at_phase_exit  << std::endl;
-    std::cout << "       pCell2...division_at_phase_exit  = " << pCell2->phenotype.cycle.pCycle_Model->phases[0].division_at_phase_exit  << std::endl;
+    // std::cout << "       pCell1...division_at_phase_exit  = " << pCell1->phenotype.cycle.pCycle_Model->phases[0].division_at_phase_exit  << std::endl;
+    // std::cout << "       pCell2...division_at_phase_exit  = " << pCell2->phenotype.cycle.pCycle_Model->phases[0].division_at_phase_exit  << std::endl;
 
+    // This is crucial! Otherwise, "division_at_phase_exit" is true when a cell divides.
     pCell1->phenotype.cycle.pCycle_Model->phases[0].division_at_phase_exit = false;
     pCell2->phenotype.cycle.pCycle_Model->phases[0].division_at_phase_exit = false;
 
