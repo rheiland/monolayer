@@ -1,10 +1,10 @@
 <PhysiCell_settings version="devel-version">
 
     <domain>
-        <x_min>-200.0</x_min>
-        <x_max>200.0</x_max>
-        <y_min>-200.0</y_min>
-        <y_max>200.0</y_max>
+        <x_min>-700.0</x_min>
+        <x_max>700.0</x_max>
+        <y_min>-700.0</y_min>
+        <y_max>700.0</y_max>
         <z_min>-10.0</z_min>
         <z_max>10.0</z_max>
         <dx>20.0</dx>
@@ -14,7 +14,7 @@
     </domain>
 
     <overall>
-        <max_time units="min">3780.0</max_time>
+        <max_time units="min">72900.0</max_time>
         <time_units>min</time_units>
         <space_units>micron</space_units>
         <dt_diffusion units="min">0.01</dt_diffusion>
@@ -23,17 +23,17 @@
     </overall>
 
     <parallel>
-        <omp_num_threads>1</omp_num_threads>
+        <omp_num_threads>4</omp_num_threads>
     </parallel>
 
     <save>
-        <folder>output_beta_gamma_custom_division</folder>
+        <folder>output_beta_gamma_custom_division_10k</folder>
         <full_data>
-            <interval units="min">6</interval>
+            <interval units="min">240</interval>
             <enable>true</enable>
         </full_data>
         <SVG>
-            <interval units="min">6</interval>
+            <interval units="min">240</interval>
             <enable>false</enable>
             <plot_substrate enabled="false" limits="false">
                 <substrate>substrate</substrate>
@@ -211,7 +211,7 @@
                 <f_i conserved="false" units="dimensionless" description="">0</f_i>
                 <beta_or_gamma conserved="false" units="" description="">0.0</beta_or_gamma>
                 <num_nbrs conserved="false" units="" description="">0.0</num_nbrs>
-                <growth_rate conserved="false" units="" description="">0.009</growth_rate>
+                <growth_rate conserved="false" units="um^3/min" description="(1047.2 - 523.6) / 89">5.883</growth_rate>
                 <norm_rand conserved="false" units="" description="">2</norm_rand>
             </custom_data>
             <initial_parameter_distributions enabled="false">
@@ -239,7 +239,8 @@
     <user_parameters>
         <number_of_cells type="int" units="none" description="initial number of cells (for each cell type)">0</number_of_cells>
         <param_matrix_elm type="int" units="" description="elm of 3x3 param matrix">0</param_matrix_elm>
-        <beta_threshold type="double" units="" description="">0.2</beta_threshold>
-        <gamma_threshold type="double" units="" description="">0.2</gamma_threshold>
+        <max_cells type="int" units="" description="max # cells in monolayer">10000</max_cells>
+        <beta_threshold type="double" units="" description="">0.9</beta_threshold>
+        <gamma_threshold type="double" units="" description="">0.9</gamma_threshold>
     </user_parameters>
 </PhysiCell_settings>
