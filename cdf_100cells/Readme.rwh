@@ -1,0 +1,12 @@
+
+(base) M1P~/git/monolayer/cdf_100cells$ cp ../cdf_100cells.xml .
+(base) M1P~/git/monolayer/cdf_100cells$ mkdir config
+(base) M1P~/git/monolayer/cdf_100cells$ cp ../config/cell000.csv config
+
+(base) M1P~/git/monolayer/cdf_100cells$ python ../beta/param_00_100cells.py ../project
+
+python ../beta/plot_cell_scalars_CDF.py -o bg00_cells100_0 -s a_i -f -1
+python ../beta/plot_cell_scalars_CDF.py -o bg00_cells100_0 -s f_i -f -1
+
+python ../beta/plot_cell_scalars_CDF.py -o bg00_cells100_1 -s a_i -f -1
+
